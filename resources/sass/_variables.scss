@@ -1,0 +1,65 @@
+$theme-colors: (
+    "primary": #fbae39,
+    "secondary": #dfdfdf,
+    "success": #008754,
+    "info": #4499ff,
+    "danger": #dc3545,
+    "dark": #524e45,
+    "white": #ffffff,
+);
+
+// Typography
+$font-family-sans-serif: "Inter", sans-serif;
+$font-size-base: 1rem;
+$line-height-base: 1.6;
+
+// side-nav-customization
+$nav-link-padding-x: 3rem;
+$nav-link-padding-y: 0.5rem;
+$nav-link-color: #454545;
+$nav-link-hover-color: #000;
+
+$nav-pills-link-active-color: #fbce3a;
+$nav-pills-link-active-bg: #424242;
+$nav-pills-border-radius: 0;
+
+$pagination-hover-color: #fbce3a;
+$pagination-focus-color: #fbce3a;
+$pagination-focus-box-shadow: 0 0 0 0.15rem #ffee3aee;
+$pagination-hover-bg: white;
+$pagination-focus-bg: white;
+$pagination-color: #6c757d;
+$pagination-active-bg: #fbce3a;
+
+button.btn-clear {
+    background: none;
+    border: none;
+    color: inherit;
+    text-align: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    outline: none;
+}
+
+button.btn-clear:hover,
+button.btn-clear:active,
+button.btn-clear:focus {
+    background: none;
+    border: none;
+    color: inherit;
+    text-align: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    outline: none;
+}
+
+.btn-primary {
+    color: white !important;
+}
+.btn-danger {
+    color: white !important;
+}
