@@ -101,6 +101,7 @@ class TripController extends Controller
             $trip->cartype = $request->cartype;
             $trip->start_time = $request->start_time;
             $trip->end_time = $request->end_time;
+            $trip->cartype = $request->cartype;
             // $trip->extra_fee_list = json_encode($extraFeeIds);
             
     
