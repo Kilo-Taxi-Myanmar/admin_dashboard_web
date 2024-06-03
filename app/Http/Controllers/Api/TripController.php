@@ -53,10 +53,10 @@ class TripController extends Controller
             'end_lng' => 'required|numeric',
             // 'status' =>'required',
             'trip_id'=> 'nullable',
-            // 'start_time '=> 'required',
-            // 'end_time'=> 'required',
-            // 'extra_fee_list' => 'required|array',
-            // 'extra_fee_list.*.id' => 'integer|exists:fees,id',
+            'start_time '=> 'required',
+            'end_time'=> 'required',
+            'extra_fee_list' => 'required|array',
+            'extra_fee_list.*.id' => 'integer|exists:fees,id',
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
@@ -72,7 +72,7 @@ class TripController extends Controller
         $driver->save();
     }
 
-    // $extraFeeIds = array_column($request->extra_fee_list, 'id');
+    $extraFeeIds = array_column($request->extra_fee_list, 'id');
        
         if($request->trip_id == null || $request->trip_id == 'null'){
             
@@ -102,7 +102,7 @@ class TripController extends Controller
             $trip->start_time = $request->start_time;
             $trip->end_time = $request->end_time;
             $trip->cartype = $request->cartype;
-            // $trip->extra_fee_list = json_encode($extraFeeIds);
+            $trip->extra_fee_list = json_encode($extraFeeIds);
             
     
 
@@ -167,7 +167,7 @@ class TripController extends Controller
             $trip->driver_id = $driver->id;
             $trip->start_time = $request->start_time;
             $trip->end_time = $request->end_time;
-            // $trip->extra_fee_list = json_encode($extraFeeIds);
+            $trip->extra_fee_list = json_encode($extraFeeIds);
             
             $system = System::findOrFail(1);
 
