@@ -251,6 +251,7 @@ class UserController extends Controller
 
             
         ]);
+        // dd($request);
 
         try {
             $user->name = $validatedData['name'];
