@@ -76,7 +76,14 @@ class TripController extends Controller
         $driver->save();
     }
 
-            $array = explode(',', $request->extra_fee_list);
+          
+            if($request->extra_fee_list !== null && $request->extra_fee_list !== "null"){
+                $array = explode(',', $request->extra_fee_list);
+                $fees=  json_encode($array);
+            }else{
+                $arr = [];
+                $fees =  json_encode($arr);
+            }
         if($request->trip_id == null || $request->trip_id == 'null'){
             
  
@@ -102,7 +109,7 @@ class TripController extends Controller
             $trip->start_time = $request->start_time;
             $trip->end_time = $request->end_time;
             $trip->cartype = $request->cartype;
-            $trip->extra_fee_list =  json_encode($array);
+            $trip->extra_fee_list = $fees;
             
     
 
@@ -131,11 +138,19 @@ class TripController extends Controller
             $extra_fee_ids = json_decode($trip->extra_fee_list);
 
             // Fetch fee details based on decoded IDs
-            $fees = collect($extra_fee_ids)->map(function ($id) {
-                return DB::table('fees')->where('id', $id)->first();
-            });
-            $trip->extra_fee_list = $fees;
+            if($fees !== null && $fees !== 'null'){
+                $datafee = collect($extra_fee_ids)->map(function ($id) {
+                    return DB::table('fees')->where('id', $id)->first();
+                });
+            }else{
+                $datafee = $fees;
+            }
+            
+            $trip->extra_fee_list = $datafee;
             return response()->json($trip);
+
+
+
         }else{
                     $trip = Trip::findOrFail($request->trip_id);
             
