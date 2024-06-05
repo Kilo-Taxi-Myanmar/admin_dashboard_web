@@ -8,9 +8,9 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
 	<title>{{ config('app.name', 'SPD Kilo Taxt') }}</title>
-	<link href="{{ asset('assets/icon/apple-touch-icon.png') }}" rel="apple-touch-icon" sizes="180x180">
-	<link type="image/png" href="{{ asset('assets/icon/favicon-32x32.png') }}" rel="icon" sizes="32x32">
-	<link type="image/png" href="{{ asset('assets/icon/favicon-16x16.png') }}" rel="icon" sizes="16x16">
+	<link href="{{ asset('assets/logo/ktm.png') }}" rel="apple-touch-icon" sizes="180x180">
+	<link type="image/png" href="{{ asset('assets/logo/ktm.png') }}" rel="icon" sizes="32x32">
+	<link type="image/png" href="{{ asset('assets/logo/ktm.png') }}" rel="icon" sizes="16x16">
 	<link href="{{ asset('assets/icon/site.webmanifest') }}" rel="manifest">
 	<style>
 		#loader {

@@ -28,8 +28,10 @@ class UserController extends Controller
         $url = 'https://s3.' . env('AWS_DEFAULT_REGION') . '.amazonaws.com/' . env('AWS_BUCKET') . '/';
         $userImage = $user->userImage;
         $vehicle = $user->vehicle;
+        $vehicle->type = json_decode($vehicle->type );
         $transaction = $user->transactions;
         $trip = $user->trip;
+
         $notification = $user->notifications;
 
         return response()->json(['user' => $user,'url'=>$url, 'success' => true], 200);
@@ -37,6 +39,9 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
+
+        // dd($request);
+
 
         $validator = Validator::make($request->all(), [
             'name' => 'nullable|string|max:255',
@@ -157,6 +162,7 @@ class UserController extends Controller
 
         if ($user->vehicle) {
             $vehicle = Vehicle::where('user_id', $user->id)->first();
+           
         } else {
             $vehicle = new Vehicle();
             $vehicle->user_id = $user->id;
@@ -183,7 +189,10 @@ class UserController extends Controller
 
             $vehicle->vehicle_image_url = $vehicleImageName;
         }
+        
         $vehicle->save();
+        $vehicle->type = json_decode($vehicle->type);
+        
         return response()->json(['user' => $user, 'status' => 'User updated successfully', 'success' => true], 200);
     }
 

@@ -180,6 +180,7 @@
 @endsection
 @push('script')
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 	<script>
         const domain = window.location.href;
         let commissionChartInstance = null;
@@ -414,7 +415,23 @@
                     document.querySelector(`#trip_${range}`).classList.remove('btn-secondary');
         }
 
+      //start pusher driver trip count  
+      Pusher.logToConsole = true;
 
+            var pusher = new Pusher('ff6d2dc3e07b1864a77d', {
+            cluster: 'ap1'
+            });
+
+            var channel = pusher.subscribe('driver-list-channel');
+            channel.bind('driver-list-event', function(data) {
+            //   alert(JSON.stringify(data));\
+
+                    let booking = JSON.stringify(data)
+            console.log(booking);
+            });
+
+   
+     //   ebd pusher driver trip count 
          window.onload = function () {
             commissionChart('month');
             topupChart('month');

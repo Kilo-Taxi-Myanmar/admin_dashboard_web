@@ -10,21 +10,25 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class TripNearDriverAllEvent implements ShouldBroadcast
-
+class DriverTopList implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $nearbyDrivers ;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($nearbyDrivers)
+
+     public $drivers;
+    public function __construct($drivers)
     {
-        $this->nearbyDrivers = "hello world";
+        $this->drivers = $drivers->map(function ($driver) {
+            return [
+                'name' => $driver->name,
+                'phone' => $driver->phone
+            ];
+        });
     }
 
     /**
@@ -34,14 +38,13 @@ class TripNearDriverAllEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('request-near-driver-all-channel');
+        // return new PrivateChannel('channel-name');
+
+        return new Channel('driver-list-channel');
     }
 
     public function broadcastAs()
     {
-        return 'request-near-driver-all-event';
+        return 'driver-list-event';
     }
-
-
-    
 }

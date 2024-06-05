@@ -60,13 +60,13 @@
     // console.log(driver);
     // });
 
-     var channel = pusher.subscribe('drivers-count-channel');
-    channel.bind('drivers-count-event', function(data) {
-    //   alert(JSON.stringify(data));\
+    //  var channel = pusher.subscribe('drivers-count-channel');
+    // channel.bind('drivers-count-event', function(data) {
+    // //   alert(JSON.stringify(data));\
 
-            let driver = JSON.stringify(data)
-    console.log(driver);
-    });
+    //         let driver = JSON.stringify(data)
+    // console.log(driver);
+    // });
    
   </script>
 </head>
