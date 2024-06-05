@@ -83,10 +83,13 @@ class UserController extends Controller
         // update profile image
         if ($request->hasFile('profile_image')) {
             
-            if (Storage::disk('s3')->exists($userImage->profile_image)) {
-           
+            $userImage = $user->userImage;  // Assuming the User model has a relationship to UserImage
+        
+            // Check if the user's current profile image exists on S3 and delete it
+            if ($userImage && !is_null($userImage->profile_image) && Storage::disk('s3')->exists($userImage->profile_image)) {
                 Storage::disk('s3')->delete($userImage->profile_image);
             }
+            
             $profileImage = $request->file('profile_image');
             $profileImageName = time() . '_' . $user->nrc_no . '.' . $profileImage->getClientOriginalExtension();
             Storage::disk('s3')->put($profileImageName, file_get_contents($profileImage));
