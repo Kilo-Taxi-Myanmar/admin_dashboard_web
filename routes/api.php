@@ -132,6 +132,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // forget password 
     Route::post('forget/password',[ForgetPasswordController::class,'forgetPassword']);
    
+    Route::post('/check/phone',[AuthController::class,'checkphone']);
 
 
     Route::get('/config',[configController::class,'config']);

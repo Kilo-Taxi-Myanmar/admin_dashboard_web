@@ -389,27 +389,61 @@ class AuthController extends Controller
     public function verifyOtp(Request $request){
         
         $user = User::where('phone', $request->phone)->first();
-        $phoneNumber = $user->phone;
-        $userOtp = $user->userotp;
+        
+
+        if($user){
+
+            $phoneNumber = $user->phone;
+            $userOtp = $user->userotp;
+
+            $now = now();
+            // $now = Carbon::now();
+            if(($userOtp->otp_code === $request->otp_code &&  $now->isBefore($userOtp->expire_at) ) || $request->otp_code === $phoneNumber){
+    
+                
+                
+                $user->save();
+                $userOtp->verified_phone = $now;
+                $userOtp->save();
+    
+                $token = $user->createToken($user->email . '_' . now(), [$user->roles->first()->name]);
+
+                
+    
+                return response(['token' =>  $token, 'status' => $user->status], 200);
+    
+            }
+    
+            return response()->json(['message' => 'Failed to  OTP'], 401);
+           
+        }else {
+            $response = ["message" => ['User does not exist']];
+            return response($response);
+        }
        
 
-        $now = now();
-        // $now = Carbon::now();
-        if(($userOtp->otp_code === $request->otp_code &&  $now->isBefore($userOtp->expire_at) ) || $request->otp_code === $phoneNumber){
 
-            $user->status = 'active';
-            
-            $user->save();
-            $userOtp->verified_phone = $now;
-            $userOtp->save();
+    }
 
-            $token = $user->createToken($user->email . '_' . now(), [$user->roles->first()->name]);
 
-            return response(['token' => $token], 200);
+    public function checkPhone(Request $request){
+        $validator = Validator::make($request->all(), [         
+            'phone' => 'required|max:15',
+    
+        ]);
 
+        if ($validator->fails()) {
+            return response(['message' => $validator->errors()->all()], 422);
         }
 
-        return response()->json(['message' => 'Failed to  OTP'], 401);
+        $user = User::where('phone', $request->phone)->first();
+        
+        if($user){
+            return response()->json(['status'=>$user->status]);
+
+        }else{
+            return response()->json(['status'=>"new user"]);
+        }
 
 
     }
