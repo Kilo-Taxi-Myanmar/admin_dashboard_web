@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Services\SMSService;
+use Illuminate\Support\Facades\Hash;
+
 class ForgetPasswordController extends Controller
 {
 
@@ -87,5 +89,22 @@ class ForgetPasswordController extends Controller
                 return response()->json(['message' => 'Failed to send OTP'], 503);
             }
         
+    }
+
+
+    public function changePassword(Request $request){
+        $validator = Validator::make($request->all(), [
+            'password' => 'required'
+        ]);
+
+
+        $auth = Auth::id();
+
+        $user = User::findOrFail($auth);
+        $user->password = Hash::make($request->password);
+
+        $user->save();
+
+        return response()->json(['message'=>'success']);
     }
 }

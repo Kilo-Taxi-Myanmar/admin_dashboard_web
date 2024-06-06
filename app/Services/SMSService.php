@@ -25,7 +25,7 @@ class SMSService
 
             'json' => [
                 "to" => $phoneNumber,
-                "message" => "OTP code for SPTS Taxi is $otp",
+                "message" => "OTP code for Kilo Taxi Myanmar is $otp",
                 "sender" => "SMSPoh"
             ]
         ]);

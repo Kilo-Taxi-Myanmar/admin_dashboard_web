@@ -108,7 +108,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // driver and customer 
     Route::post('trip/status/update/{id}',[TripController::class,'tripStatusupdate']);
-   
+    Route::post('change/password',[ForgetPasswordController::class,'changePassword']);
     
     
 
@@ -131,7 +131,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // forget password 
     Route::post('forget/password',[ForgetPasswordController::class,'forgetPassword']);
+   
+
 
     Route::get('/config',[configController::class,'config']);
     Route::post('/config/add',[configController::class,'configstore']);
+    
+
 
