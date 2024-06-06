@@ -83,6 +83,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('driver/available/update', [DriverLocationController::class, 'driverAvailableUpdate']);
     Route::get('search/trip/{id}',[DriverSearchController::class,'searchTripId']);
     Route::post('/driver/trip/start/{id}',[TripStatusController::class,'start']); //start trip
+    Route::get('/total/price-and-trip/{range}',[UserController::class,'totalTripandPrice']);//total trip count and price
+
 
     // customer route 
     Route::get('/car/type',[DriverLocationController::class,'cartype']);

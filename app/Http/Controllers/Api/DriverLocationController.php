@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\DriverEvent;
-
 use App\Events\TripNearDriverAllEvent;
 use App\Http\Controllers\Controller;
 use App\Models\CarType;

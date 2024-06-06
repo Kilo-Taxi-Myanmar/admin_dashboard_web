@@ -64,7 +64,10 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'remember_token' => Str::random(10)
         ])->assignRole('user');
-        $user->driver_id = sprintf('%04d', $user->id - 1);
+        // $user->driver_id = sprintf('%04d', $user->id - 1);
+        $lastUser = User::orderBy('id', 'desc')->first();
+        $nextId = $lastUser ? $lastUser->id + 1 : 1;
+        $user->driver_id = 'KTM-' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
         $user->fill($request->only(['birth_date', 'address', 'nrc_no', 'driving_license']));
 
         $user->save();
@@ -89,7 +92,7 @@ class AuthController extends Controller
         }
         if ($request->hasFile('vehicle_image')) {
             $vehicleImage = $request->file('vehicle_image');
-            $vehicleImageName = time() . '.' . $vehicleImage->getClientOriginalExtension();
+            $vehicleImageName =  uniqid() . '.' . $vehicleImage->getClientOriginalExtension();
             // $vehicleImage->storeAs('uploads/images/vehicles', $vehicleImageName);
             Storage::disk('s3')->put($vehicleImageName, file_get_contents($vehicleImage));
 
@@ -106,7 +109,7 @@ class AuthController extends Controller
         // upload and save front NRC image
         if ($request->hasFile('front_nrc_image')) {
             $frontNrcImage = $request->file('front_nrc_image');
-            $frontNrcImageName = time() . '.' . $frontNrcImage->getClientOriginalExtension();
+            $frontNrcImageName = uniqid() . '_' . $frontNrcImage->getClientOriginalName();
             // $frontNrcImage->storeAs('uploads/images/front_nrcs', $frontNrcImageName);
             Storage::disk('s3')->put($frontNrcImageName, file_get_contents($frontNrcImage));
 
@@ -118,7 +121,7 @@ class AuthController extends Controller
         // upload and save back NRC image
         if ($request->hasFile('back_nrc_image')) {
             $backNrcImage = $request->file('back_nrc_image');
-            $backNrcImageName = time() . '.' . $backNrcImage->getClientOriginalExtension();
+            $backNrcImageName =  uniqid()  . '.' . $backNrcImage->getClientOriginalExtension();
             // $backNrcImage->storeAs('uploads/images/back_nrcs', $backNrcImageName);
             Storage::disk('s3')->put($backNrcImageName, file_get_contents($backNrcImage));
 
@@ -130,7 +133,7 @@ class AuthController extends Controller
         // upload and save front license image
         if ($request->hasFile('front_license_image')) {
             $frontLicenseImage = $request->file('front_license_image');
-            $frontLicenseImageName = time() . '.' . $frontLicenseImage->getClientOriginalExtension();
+            $frontLicenseImageName =  uniqid()  . '.' . $frontLicenseImage->getClientOriginalExtension();
             // $frontLicenseImage->storeAs('uploads/images/front_licenses', $frontLicenseImageName);
             Storage::disk('s3')->put($frontLicenseImageName, file_get_contents($frontLicenseImage));
 
@@ -142,7 +145,7 @@ class AuthController extends Controller
         // upload and save back license image
         if ($request->hasFile('back_license_image')) {
             $backLicenseImage = $request->file('back_license_image');
-            $backLicenseImageName = time() . '.' . $backLicenseImage->getClientOriginalExtension();
+            $backLicenseImageName =  uniqid()  . '.' . $backLicenseImage->getClientOriginalExtension();
             // $backLicenseImage->storeAs('uploads/images/back_licenses', $backLicenseImageName);
             Storage::disk('s3')->put($backLicenseImageName, file_get_contents($backLicenseImage));
             $userImage->back_license_image = $backLicenseImageName;
@@ -153,7 +156,7 @@ class AuthController extends Controller
          // upload and save profile  image
          if ($request->hasFile('profile_image')) {
             $profileImage = $request->file('profile_image');
-            $profileImageName = time() . '.' . $profileImage->getClientOriginalExtension();
+            $profileImageName =  uniqid()  . '.' . $profileImage->getClientOriginalExtension();
             // $profileImage->storeAs('uploads/images/profiles', $profileImageName);
     
             Storage::disk('s3')->put($profileImageName, file_get_contents($profileImage));

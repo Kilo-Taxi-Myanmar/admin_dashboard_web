@@ -91,7 +91,7 @@ class UserController extends Controller
             }
             
             $profileImage = $request->file('profile_image');
-            $profileImageName = time() . '_' . $user->nrc_no . '.' . $profileImage->getClientOriginalExtension();
+            $profileImageName = uniqid() . '_' . $user->nrc_no . '.' . $profileImage->getClientOriginalExtension();
             Storage::disk('s3')->put($profileImageName, file_get_contents($profileImage));
             $userImage->profile_image = $profileImageName;
             $userImage->save();
@@ -105,7 +105,7 @@ class UserController extends Controller
                 Storage::disk('s3')->delete($userImage->front_nrc_image);
             }
             $frontNrcImage = $request->file('front_nrc_image');
-            $frontNrcImageName = time() . '.' . $frontNrcImage->getClientOriginalExtension();
+            $frontNrcImageName = uniqid() . '.' . $frontNrcImage->getClientOriginalExtension();
             Storage::disk('s3')->put($frontNrcImageName, file_get_contents($frontNrcImage));
             $userImage->front_nrc_image = $frontNrcImageName;
             $userImage->save();
@@ -119,7 +119,7 @@ class UserController extends Controller
                 Storage::disk('s3')->delete($userImage->back_nrc_image);
             }
             $backNrcImage = $request->file('back_nrc_image');
-            $backNrcImageName = time() . '.' . $backNrcImage->getClientOriginalExtension();
+            $backNrcImageName = uniqid() . '.' . $backNrcImage->getClientOriginalExtension();
             Storage::disk('s3')->put($backNrcImageName, file_get_contents($backNrcImage));
             $userImage->back_nrc_image = $backNrcImageName;
             $userImage->save();
@@ -133,7 +133,7 @@ class UserController extends Controller
                 Storage::disk('s3')->delete($userImage->front_license_image);
             }
             $backNrcImage = $request->file('front_license_image');
-            $backNrcImageName = time() . '.' . $backNrcImage->getClientOriginalExtension();
+            $backNrcImageName = uniqid() . '.' . $backNrcImage->getClientOriginalExtension();
             Storage::disk('s3')->put($backNrcImageName, file_get_contents($backNrcImage));
             $userImage->front_license_image = $backNrcImageName;
             $userImage->save();
@@ -146,7 +146,7 @@ class UserController extends Controller
                 Storage::disk('s3')->delete($userImage->back_license_image);
             }
             $backLicenseImage = $request->file('back_license_image');
-            $backLicenseImageName = time() . '.' . $backLicenseImage->getClientOriginalExtension();
+            $backLicenseImageName = uniqid() . '.' . $backLicenseImage->getClientOriginalExtension();
             Storage::disk('s3')->put($backLicenseImageName, file_get_contents($backLicenseImage));
           
             $userImage->back_license_image = $backLicenseImageName;
@@ -384,6 +384,86 @@ class UserController extends Controller
         return response()->json(['user' => $user, 'status' => 'User updated successfully', 'success' => true], 200);
     }
 
+    public function totalTripandPrice($range){
+        $user = Auth::user();
+        $trips = $user->trips;
+
+        
+
+        if ($range === 'day') {
+            $startDate = Carbon::now()->startOfDay();
+            $endDate = Carbon::now()->endOfDay();
+
+            // Get trips for the current day
+            $todayTrips = $trips->whereBetween('created_at', [$startDate, $endDate]);
+
+            $totalTripCount = $todayTrips->count();
+            $totalAmount = $todayTrips->sum('total_cost');
+
+            return response()->json([
+                'trip_count' => $totalTripCount,
+                'total_amount' => $totalAmount,
+            ]);
+
+            
+        } elseif ($range === 'week') {
+            $startDate = Carbon::now()->startOfWeek();
+            $endDate = Carbon::now()->endOfWeek();
+
+            // Get trips for the current day
+            $todayTrips = $trips->whereBetween('created_at', [$startDate, $endDate]);
+
+            $totalTripCount = $todayTrips->count();
+            $totalAmount = $todayTrips->sum('total_cost');
+
+            return response()->json([
+                'trip_count' => $totalTripCount,
+                'total_amount' => $totalAmount,
+            ]);
+        } elseif ($range === 'month') {
+            $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::now()->endOfMonth();
+
+            
+            // Get trips for the current day
+            $todayTrips = $trips->whereBetween('created_at', [$startDate, $endDate]);
+
+            $totalTripCount = $todayTrips->count();
+            $totalAmount = $todayTrips->sum('total_cost');
+
+            return response()->json([
+                'trip_count' => $totalTripCount,
+                'total_amount' => $totalAmount,
+            ]);
+
+        } elseif ($range === 'year') {
+            $startDate = Carbon::now()->startOfYear();
+            $endDate = Carbon::now()->endOfYear();
+
+            
+            // Get trips for the current day
+            $todayTrips = $trips->whereBetween('created_at', [$startDate, $endDate]);
+
+            $totalTripCount = $todayTrips->count();
+            $totalAmount = $todayTrips->sum('total_cost');
+
+            return response()->json([
+                'trip_count' => $totalTripCount,
+                'total_amount' => $totalAmount,
+            ]);
+        }
+
+        $tripCount = $trips->count();
+        $totalBalance = $trips->sum('total_cost');
+
+        return response()->json([
+            'trip_count' => $tripCount,
+            'total_balance' => $totalBalance,
+        ]);
+
+
+
+    }
 
     
 }
