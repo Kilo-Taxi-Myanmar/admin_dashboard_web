@@ -148,14 +148,14 @@ class TripController extends Controller
             
             $trip->extra_fee_list = $datafee;
 
-            $drivers = User::role('user')->with(['trips' => function ($query) {
-                $query->whereBetween('created_at', [Carbon::now()->startOfWeek(),Carbon::now()->endOfWeek()]);
-            }])
+            // $drivers = User::role('user')->with(['trips' => function ($query) {
+            //     $query->whereBetween('created_at', [Carbon::now()->startOfWeek(),Carbon::now()->endOfWeek()]);
+            // }])
            
-            ->get();
+            // ->get();
           
             
-            event(new DriverTopList($drivers));
+            // event(new DriverTopList($drivers));
 
 
             return response()->json($trip);
