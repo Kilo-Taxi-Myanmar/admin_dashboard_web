@@ -7,7 +7,7 @@
 	<!-- CSRF Token -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-	<title>{{ config('app.name', 'SPD Kilo Taxt') }}</title>
+	<title>{{ config('app.name', 'kilo taxi') }}</title>
 	<link href="{{ asset('assets/logo/ktm.png') }}" rel="apple-touch-icon" sizes="180x180">
 	<link type="image/png" href="{{ asset('assets/logo/ktm.png') }}" rel="icon" sizes="32x32">
 	<link type="image/png" href="{{ asset('assets/logo/ktm.png') }}" rel="icon" sizes="16x16">
@@ -29,6 +29,9 @@
 	<!-- Scripts -->
 	<link href="{{ mix('css/app.css') }}" rel="stylesheet">
 	<script src="{{ mix('js/app.js') }}" defer></script>
+
+	{{-- gogle map   --}}
+	<script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}"></script>
 	@stack('style')
 </head>
 

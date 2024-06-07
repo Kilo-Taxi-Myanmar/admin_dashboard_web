@@ -15,18 +15,17 @@ class SMSService
         $this->apiKey = config('smspost.api_key');
     }
 
-    public function sendOTP($phoneNumber, $otp)
+    public function sendOTP($phoneNumber, $otp, $senderName = 'SMSPoh')
     {
         $response = $this->client->post('https://smspoh.com/api/v2/send', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $this->apiKey,
                 'Content-Type' => 'application/json',
             ],
-
             'json' => [
-                "to" => $phoneNumber,
-                "message" => "OTP code for Kilo Taxi Myanmar is $otp",
-                "sender" => "SMSPoh"
+                'to' => $phoneNumber,
+                'message' => "OTP code for Kilo Taxi Myanmar is $otp",
+                'sender' => $senderName,
             ]
         ]);
 

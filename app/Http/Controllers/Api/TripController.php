@@ -109,6 +109,7 @@ class TripController extends Controller
             $trip->end_time = $request->end_time;
             $trip->cartype = $request->cartype;
             $trip->extra_fee_list = $fees;
+            $trip->polyline = json_encode($request->polyline);
             
     
 
@@ -186,8 +187,8 @@ class TripController extends Controller
             $trip->driver_id = $driver->id;
             $trip->start_time = $request->start_time;
             $trip->end_time = $request->end_time;
-            $trip->extra_fee_list = json_encode($request->extra_fee_list);
-            
+            $trip->extra_fee_list = $fees;
+            $trip->polyline = json_encode($request->polyline);
             $system = System::findOrFail(1);
 
             $initial_fee=0;

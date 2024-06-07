@@ -231,6 +231,14 @@
 					<span class="d-inline d-sm-none d-lg-inline">Notification</span>
 				</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{ route('map.index') }}">
+					<span class="pe-3" style="margin-left: -3px">
+						<i class="fas fa-map-marked-alt"></i>
+					</span>
+					<span class="d-inline d-sm-none d-lg-inline">Map</span>
+				</a>
+			</li>
 		</ul>
 	</div>
 
