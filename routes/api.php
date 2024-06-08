@@ -109,7 +109,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // driver and customer 
     Route::post('trip/status/update/{id}',[TripController::class,'tripStatusupdate']);
     Route::post('change/password',[ForgetPasswordController::class,'changePassword']);
-    
+    Route::get('/top/lists',[UserController::class,'topLists']);
     
 
     // test 

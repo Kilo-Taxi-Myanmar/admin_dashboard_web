@@ -114,13 +114,29 @@ class TripController extends Controller
     
 
             $system =  System::find(1);
-            $total = $request->total_cost; // Total amount
+            // $total = $request->total_cost; // Total amount
             // $percentage = 10; // Percentage to calculate
             
           
             // Update user's balance
-            $driver->balance -= $system->commission_fee;
+            // $driver->balance -= $system->commission_fee;
+
+           
     
+           
+            $totalCost = $request->total_cost; // Total amount
+            $percentage = $system->commission_fee; // Percentage to calculate 3
+            
+            // Calculate the percentage amount
+            // $percentageAmount = ($percentage / 100) * $total;
+            $percentageAmount = ($totalCost * $percentage) / 100;
+
+            
+            // Update user's balance
+            $driver->balance -= $percentageAmount;
+
+
+            $trip->commission_fee = $percentageAmount;
             $driver->save();
     
     
@@ -135,6 +151,8 @@ class TripController extends Controller
             $system->balance += $system->commission_fee;
             $system->save();
             $trip->save();
+
+
             $extra_fee_ids = json_decode($trip->extra_fee_list);
 
             // Fetch fee details based on decoded IDs

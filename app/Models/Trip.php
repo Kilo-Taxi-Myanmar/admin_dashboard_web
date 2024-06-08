@@ -37,7 +37,8 @@ class Trip extends Model
         'end_time',
         'extra_fee_list',
         'cartype',
-        'status'
+        'status',
+        'commission_fee'
     ];
 
     // protected $casts = [

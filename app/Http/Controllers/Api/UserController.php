@@ -466,5 +466,44 @@ class UserController extends Controller
 
     }
 
+    public function topLists(){
+        $authUser = Auth::user();
+
+        // Drivers and their trip counts
+        $drivers = Trip::where('status','completed')->select('driver_id', DB::raw('count(*) as total_trips'))
+                            ->groupBy('driver_id')
+                            ->orderBy('total_trips', 'desc')
+                            ->get();
+
+        // Add ranking to drivers
+        $driverDetails = $drivers->map(function ($driver, $index) {
+            $user = User::find($driver->driver_id);
+            return [
+                'driver_id' => $driver->driver_id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'total_trips' => $driver->total_trips,
+                'rank' => $index + 1 // Add rank field based on index
+            ];
+        });
+
+        // Auth User's Rank
+        $authUserRank = $driverDetails->firstWhere('driver_id', $authUser->id)['rank'] ?? null;
+
+        // Top 10 Drivers
+        $topDrivers = $driverDetails->take(10);
+
+        // Response ပြန်ပေးရန်
+        return response()->json([
+            'auth_user' => [
+                'id' => $authUser->id,
+                'name' => $authUser->name,
+                'email' => $authUser->email,
+                'rank' => $authUserRank,
+                // other user fields
+            ],
+            'top_drivers' => $topDrivers
+        ]);
+    }
     
 }

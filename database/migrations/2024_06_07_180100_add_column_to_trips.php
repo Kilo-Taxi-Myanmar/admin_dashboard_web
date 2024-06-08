@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('trips', function (Blueprint $table) {
             $table->string('polyline')->after('extra_fee_list')->nullable();
+            $table->decimal('commission_fee', 8, 2)->after('polyline')->default(3)->nullable();
             
         });
     }
@@ -27,7 +28,9 @@ return new class extends Migration
     public function down()
     {
         Schema::table('trips', function (Blueprint $table) {
-            //
+            $table->string('polyline')->after('extra_fee_list')->nullable();
+            $table->decimal('commission_fee', 8, 2)->after('polyline')->default(3)->nullable();
+            
         });
     }
 };
