@@ -114,22 +114,18 @@ class TripController extends Controller
     
 
             $system =  System::find(1);
-            // $total = $request->total_cost; // Total amount
-            // $percentage = 10; // Percentage to calculate
-            
-          
-            // Update user's balance
-            // $driver->balance -= $system->commission_fee;
-
            
     
            
             $totalCost = $request->total_cost; // Total amount
             $percentage = $system->commission_fee; // Percentage to calculate 3
+          
+            if($percentage >= 100){
+                $percentageAmount =$percentage ;
+            }else{
+                $percentageAmount = ($totalCost * $percentage) / 100;
+            }
             
-            // Calculate the percentage amount
-            // $percentageAmount = ($percentage / 100) * $total;
-            $percentageAmount = ($totalCost * $percentage) / 100;
 
             
             // Update user's balance
