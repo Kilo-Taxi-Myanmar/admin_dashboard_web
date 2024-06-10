@@ -40,6 +40,7 @@ class TripController extends Controller
     public function store(Request $request)
     {
 
+        // dd($request);
     
         $validator = Validator::make($request->all(), [
             'distance' => 'required|numeric',
@@ -49,6 +50,8 @@ class TripController extends Controller
             // 'waiting_fee' => 'required|numeric',
             // 'extra_fee' => 'required|numeric',
             'total_cost' => 'required|numeric',
+            'start_lat' => 'required|numeric',
+            'start_lng' => 'required|numeric',
             'end_lat' => 'required|numeric',
             'end_lng' => 'required|numeric',
             // 'status' =>'required',
@@ -98,6 +101,8 @@ class TripController extends Controller
             $trip->waiting_fee = $request->waiting_fee;
             $trip->extra_fee = $request->extra_fee;
             $trip->total_cost = $request->total_cost;
+            $trip->start_lat = $request->end_lat;
+            $trip->start_lng = $request->end_lng;
             $trip->end_lat = $request->end_lat;
             $trip->end_lng = $request->end_lng;
             $trip->status = "completed";

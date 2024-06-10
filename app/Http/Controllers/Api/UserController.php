@@ -309,6 +309,7 @@ class UserController extends Controller
                     'end_time' => $trip->end_time,
                     'extra_fee_list'=>$fees->toArray(),
                     'polyline' => json_decode($trip->polyline),
+                    'commission_fee'=>$trip->commission_fee,
                     // 'extra_fee_list'=>$extraFees,
 
                     'created_at' => Carbon::parse($trip->created_at)->format('Y-m-d h:i A'),
