@@ -581,12 +581,12 @@ class UserController extends Controller
 
 
 
-        $startDate = Carbon::now()->startOfYear();
+$startDate = Carbon::now()->startOfYear();
 $endDate = Carbon::now()->endOfYear();
 
 // Fetch trips with completed status within the date range
-$trips = Trip::
-    whereBetween('created_at', [$startDate, $endDate])
+$trips = Trip::where('status','completed')
+    ->whereBetween('created_at', [$startDate, $endDate])
     ->orderBy('created_at')
     ->get();
 
