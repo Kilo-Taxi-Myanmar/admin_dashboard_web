@@ -220,7 +220,12 @@ class UserController extends Controller
         $tripsCount = $tripsQuery->count();
         $trips = $tripsQuery->latest()->paginate(10);
 
-        return view('backend.users.show', compact('user', 'transactions', 'trips', 'tripsCount'));
+         $driver = $user; // Assuming User model has latitude and longitude fields
+        $latitude = $driver->latitude;
+        $longitude = $driver->longitude;
+
+        return view('backend.users.show', compact('user', 'transactions', 'trips', 'tripsCount', 'latitude', 'longitude'));
+    
     }
 
 
@@ -781,12 +786,12 @@ class UserController extends Controller
 
         // $success = $this->smsService->sendOTP($phoneNumber, $otp);
 
-        if ($success) {
-            // OTP sent successfully
-            return response()->json(['message' => 'OTP sent successfully'], 200);
-        } else {
-            // Failed to send OTP
-            return response()->json(['message' => 'Failed to send OTP'], 500);
-        }
+        // if ($success) {
+        //     // OTP sent successfully
+        //     return response()->json(['message' => 'OTP sent successfully'], 200);
+        // } else {
+        //     // Failed to send OTP
+        //     return response()->json(['message' => 'Failed to send OTP'], 500);
+        // }
     }
 }

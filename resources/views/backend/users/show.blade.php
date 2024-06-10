@@ -93,6 +93,7 @@
                                         </li>
                                     </ul>
                                 </div>
+                               
                                 <div class="d-flex justify-content-between">
                                     <div class="d-flex flex-row gap-2">
                                         <div class=" col-8 bg-primary text-white p-2 rounded text-center">{{ "Balance : ".$user->balance }}</div>
@@ -106,6 +107,9 @@
                                     </div>
                                 </div>
                                 <div style="width: 100%;"><canvas id="userChart"></canvas></div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <div id="map" style="height: 600px;"></div>
                             </div>
                         </div>
                     </div>
@@ -220,8 +224,17 @@
 @endsection
 @push('script')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {{-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHWnJ99eF2wvCJdFgIRIkpBYyEuZwazFM"></script> --}}
 	<script>
-        const domain = window.location.href;
+       
+      
+       
+       
+       
+
+       
+       
+       const domain = window.location.href;
         let chartInstance = null;
 
         async function userChart(range,userId) {
@@ -272,7 +285,7 @@
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
+                    // console.log(error);
                 });
                 const ranges = ['day', 'week', 'month', 'year'];
                     ranges.forEach((rag) => {
@@ -293,7 +306,7 @@
             const text = document.querySelector(`#${id}`).innerText;
             navigator.clipboard.writeText(text)
                 .then(() => {
-                console.log('Text copied to clipboard',text);
+                // console.log('Text copied to clipboard',text);
                  document.querySelector('#copy_btn').classList.remove('fa-clipboard');
                  document.querySelector('#copy_btn').classList.add('fa-copy');
                  setTimeout(() => {
@@ -302,8 +315,78 @@
                  }, 5000);
                 })
                 .catch((error) => {
-                console.error('Error copying text to clipboard:', error);
+                // console.error('Error copying text to clipboard:', error);
                 });
         }
+
+ 
+         // map 
+         let user = @json($user);
+         let latitude = user.lat;
+        var longitude = user.lng;
+        let taxicon = '';
+
+        // console.log(latitude,longitude ,user)
+
+   
+        
+        function initialize() {
+			var myLatlng = new google.maps.LatLng(latitude, longitude);
+			var myOptions = {
+				zoom: 15.5,
+                
+				center: myLatlng,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			}
+			map = new google.maps.Map(document.getElementById('map'), myOptions);
+			const legend = document.getElementById("maplegend");
+
+			map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend)
+		}
+
+        function changeMarkerPositions(locations)
+		{
+
+			
+			var infowindow = new google.maps.InfoWindow();
+			var markers = {};
+			if(markers[locations.id] ){
+						markers[locations.id].setMap(null); // set markers setMap to null to remove it from map
+						delete markers[locations.id]; // delete marker instance from markers object
+					}
+					
+					if( locations.active == 'active' && locations.available == 0) {
+						taxicon = "{{ asset('assets/icon/ontrip.png') }}";
+					} else if( locations.active == 'active' && locations.available == 1) {
+						taxicon = "{{ asset('assets/icon/online.png') }}";
+					} else {
+						taxicon = "{{ asset('assets/icon/offline.png') }}";
+					}
+					marker = new google.maps.Marker({
+						position:  new google.maps.LatLng( parseFloat(locations.lat)  + (Math.random() -.5) / 1500, parseFloat(locations.lng) + (Math.random() -.5) / 1500 ),
+						map: map,
+						icon: taxicon,
+                        
+						driver_id: locations.id
+					});
+					
+		}
+
+
+        window.onload = function() {
+            initialize()
+            changeMarkerPositions(user)
+        }
+       
+       
+       
+       
+    //    --------------------------------
+       
+       
+       
+
     </script>
+    
+
 @endpush

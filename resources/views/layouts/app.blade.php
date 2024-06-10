@@ -26,12 +26,17 @@
 	<link href="//fonts.gstatic.com" rel="dns-prefetch">
 	<link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
+	{{-- jquery --}}
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<!-- Scripts -->
 	<link href="{{ mix('css/app.css') }}" rel="stylesheet">
 	<script src="{{ mix('js/app.js') }}" defer></script>
 
 	{{-- gogle map   --}}
-	<script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAP_KEY')}}"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAP_KEY')}}&libraries=geometry"></script>
+	
+	
 	@stack('style')
 </head>
 

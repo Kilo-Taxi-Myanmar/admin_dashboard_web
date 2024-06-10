@@ -86,6 +86,10 @@ class TripController extends Controller
         
         $trip = Trip::findOrFail($id);
         $user = User::findOrFail($trip->driver_id);
+        $polyline = $trip->polyline; 
+        $startLocation = ['lat' => $trip->start_lat, 'lng' => $trip->start_lng]; // Start point coordinates
+        $endLocation = ['lat' => $trip->end_lat, 'lng' => $trip->end_lng]; // End point coordinates
+        
         if($trip->user_id === null){
         $customer = null;
             
@@ -103,7 +107,7 @@ class TripController extends Controller
         // $tripsCount = $tripsQuery->count();
         // $trips = $tripsQuery->latest()->paginate(10);
 
-        return view('backend.trip.show', compact('user', 'customer', 'trip'));
+        return view('backend.trip.show', compact('user', 'customer', 'trip','polyline','startLocation','endLocation'));
     }
 
     public function destroy($id)

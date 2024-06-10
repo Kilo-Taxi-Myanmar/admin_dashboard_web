@@ -42,6 +42,9 @@ Route::get('/app-link', [ChangeLogController::class, 'appLink']);
 Route::middleware(['auth:sanctum'])->group(function () {
     // our routes to be protected will go in here
     Route::post('/logout', [AuthController::class, 'logout']);
+    
+    Route::post('refresh', [AuthController::class, 'refresh']);
+
 
     //routes for user
     Route::get('/user/profile', [UserController::class, 'profile']);
@@ -100,7 +103,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // booking 
     // Route::get('customer/trip/data',[CustromerTripController::class,'index']);
-    Route::apiResource('/customer/trip', CustromerTripController::class, array("as" => "api"));//tripcreate and trip get custromer
+    // Route::apiResource('/customer/trip', CustromerTripController::class, array("as" => "api"));//trip create and trip get custromer
     Route::post('customer/trip/update/{id}',[CustromerTripController::class,'update']);
     Route::get('driver/search/trip/{id}',[DriverSearchController::class,'searchTrip']);
     Route::post('customer/booking',[CustromerTripController::class,'store']);

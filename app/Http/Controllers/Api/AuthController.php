@@ -168,7 +168,7 @@ class AuthController extends Controller
         // save user images to database
         $userImage->save();
 
-        $token = $user->createToken($user->email . '_' . now(), [$user->roles->first()->name]);
+        $token = $user->createToken($user->phone . '_' . now(), [$user->roles->first()->name]);
 
         return response(['token' => $token], 200);
     }
@@ -193,7 +193,7 @@ class AuthController extends Controller
             if($user->status === 'active'){
                if($user->roles->contains('name', 'user')){
                 if (Hash::check($request->password, $user->password)) {
-                    $token = $user->createToken($user->email . '_' . now(), [$user->roles->first()->name]);
+                    $token = $user->createToken($user->phone . '_' . now(), [$user->roles->first()->name]);
                     $user->device_token = $request->fcm_token;
                     $user->save();
                     return response()->json(['token' =>  $token, 'status' => $user->status], 200);
@@ -237,7 +237,7 @@ class AuthController extends Controller
             if($user->status === 'active'){
                if($user->roles->contains('name', 'customer')){
                 if (Hash::check($request->password, $user->password)) {
-                    $token = $user->createToken($user->email . '_' . now(), [$user->roles->first()->name]);
+                    $token = $user->createToken($user->phone . '_' . now(), [$user->roles->first()->name]);
                     $user->device_token = $request->fcm_token;
                     $user->save();
                     return response()->json(['token' =>  $token, 'status' => $user->status], 200);
@@ -320,7 +320,7 @@ class AuthController extends Controller
             $UserOTP->save();
 
             // OTP sent successfully
-            $token = $user->createToken($user->email . '_' . now(), [$user->roles->first()->name]);
+            $token = $user->createToken($user->phone . '_' . now(), [$user->roles->first()->name]);
 
             return response(['token' => $token,'OTP'=>$otp], 200);
         } else {
@@ -446,5 +446,17 @@ class AuthController extends Controller
         }
 
 
+    }
+
+    public function refresh(Request $request)
+    {
+        $user = Auth::user();
+   
+        $tokenResult = $user->createToken($user->phone . '_' . now(), [$user->roles->first()->name]);
+        $token = $tokenResult->accessToken;
+
+        return response()->json([
+            'token' => $token
+        ], 200);
     }
 }

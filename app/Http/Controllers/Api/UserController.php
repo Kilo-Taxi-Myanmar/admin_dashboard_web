@@ -478,17 +478,19 @@ class UserController extends Controller
         // Add ranking to drivers
         $driverDetails = $drivers->map(function ($driver, $index) {
             $user = User::find($driver->driver_id);
+
             return [
-                'driver_id' => $driver->driver_id,
+                'driver_id' => $user->driver_id,
                 'name' => $user->name,
                 'email' => $user->email,
                 'total_trips' => $driver->total_trips,
+                'profile_image' => $user->userImage->profile_image,
                 'rank' => $index + 1 // Add rank field based on index
             ];
         });
 
         // Auth User's Rank
-        $authUserRank = $driverDetails->firstWhere('driver_id', $authUser->id)['rank'] ?? null;
+        $authUserRank = $driverDetails->firstWhere('driver_id', $authUser->driver_id)['rank'] ?? null;
 
         // Top 10 Drivers
         $topDrivers = $driverDetails->take(10);
@@ -496,13 +498,15 @@ class UserController extends Controller
         // Response ပြန်ပေးရန်
         return response()->json([
             'auth_user' => [
-                'id' => $authUser->id,
+                'driver_id' => $authUser->driver_id,
                 'name' => $authUser->name,
-                'email' => $authUser->email,
+                'total_trips' => $authUser->trips->where('status','completed')->count(),
+                'profile_image' =>$authUser->userImage->profile_image,
                 'rank' => $authUserRank,
                 // other user fields
             ],
-            'top_drivers' => $topDrivers
+            'top_drivers' => $topDrivers,
+            'url'=>'https://s3.' . env('AWS_DEFAULT_REGION') . '.amazonaws.com/' . env('AWS_BUCKET') . '/',
         ]);
     }
     
