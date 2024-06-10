@@ -467,47 +467,173 @@ class UserController extends Controller
     }
 
     public function topLists(){
-        $authUser = Auth::user();
+        // $authUser = Auth::user();
 
-        // Drivers and their trip counts
-        $drivers = Trip::where('status','completed')->select('driver_id', DB::raw('count(*) as total_trips'))
-                            ->groupBy('driver_id')
-                            ->orderBy('total_trips', 'desc')
-                            ->get();
+        // // Drivers and their trip counts
+        // $drivers = Trip::where('status','completed')->select('driver_id', DB::raw('count(*) as total_trips'))
+        //                     ->groupBy('driver_id')
+        //                     ->orderBy('total_trips', 'desc')
+        //                     ->get();
 
-        // Add ranking to drivers
-        $driverDetails = $drivers->map(function ($driver, $index) {
-            $user = User::find($driver->driver_id);
+        // // Add ranking to drivers
+        // $driverDetails = $drivers->map(function ($driver, $index) {
+        //     $user = User::find($driver->driver_id);
 
+        //     return [
+        //         'driver_id' => $user->driver_id,
+        //         'name' => $user->name,
+        //         'email' => $user->email,
+        //         'total_trips' => $driver->total_trips,
+        //         'profile_image' =>  optional($user->userImage)->profile_image,
+        //         'rank' => $index + 1 // Add rank field based on index
+        //     ];
+        // });
+
+        // // Auth User's Rank
+        // $authUserRank = $driverDetails->firstWhere('driver_id', $authUser->driver_id)['rank'] ?? null;
+
+        // Top 10 Drivers
+        // $topDrivers = $driverDetails->take(10);
+
+        // Response ပြန်ပေးရန်
+        // return response()->json([
+        //     'auth_user' => [
+        //         'driver_id' => $authUser->driver_id,
+        //         'name' => $authUser->name,
+        //         'total_trips' => $authUser->trips->where('status','completed')->count(),
+        //         'profile_image' =>optional($authUser->userImage)->profile_image,
+        //         'rank' => $authUserRank,
+                
+        //     ],
+        //     'top_drivers' => $topDrivers,
+        //     'url'=>'https://s3.' . env('AWS_DEFAULT_REGION') . '.amazonaws.com/' . env('AWS_BUCKET') . '/',
+        // ]);
+
+        
+        // $startDate = Carbon::now()->startOfYear();
+        // $endDate = Carbon::now()->endOfYear();
+        
+        // // Fetch trips with completed status within the date range
+        // $trips = Trip::
+        //     whereBetween('created_at', [$startDate, $endDate])
+        //     ->orderBy('created_at')
+        //     ->get();
+        
+        // $collection = collect($trips);
+        
+        // // Group trips by month
+        // $trips = $collection->groupBy(function ($trip) {
+        //     return Carbon::parse($trip->created_at)->format('Y-m');
+        // })->map(function ($group) {
+        //     // Group by driver_id and get drivers with total trips
+        //     $drivers = $group->groupBy('driver_id')->map(function ($driverTrips, $driverId) {
+        //         $user = User::find($driverId);
+                
+        //         // Check if the user exists and has the 'user' role
+        //         if ($user && $user->roles()->where('name', 'user')->exists()) {
+        //             return [
+        //                 'driver_id' => $user->driver_id,
+        //                 'name' => $user->name,
+                        
+        //                 'total_trips' => $driverTrips->count(),
+        //                 'profile_image' => optional($user->userImage)->profile_image,
+        //             ];
+        //         }
+        //         return null;
+        //     })->filter()->sortByDesc('total_trips')->values(); // Sort and re-index
+        
+        //     // Add ranking to drivers
+        //     $rankedDrivers = $drivers->map(function ($driver, $index) {
+        //         $driver['rank'] = $index + 1; // Add rank based on index
+        //         return $driver;
+        //     }); // Take top 10
+
+        //     $authUser = Auth::user();
+        //     $authUserRank = $rankedDrivers->firstWhere('driver_id', $authUser->driver_id);
+
+        //     $auth = [
+               
+        //         'driver_id' => $authUser->driver_id,
+        //         'name' => $authUser->name,
+        //         'total_trips' => $authUser->trips->where('status','completed')->count(),
+        //         'profile_image' =>optional($authUser->userImage)->profile_image,
+        //         'auth_user_rank' => $authUserRank ? $authUserRank['rank'] : null,
+                
+        //     ];
+             
+        
+        //     return [
+        //         'date' => $group->first()->created_at->format('Y F'),
+        //         'authuser'=> $auth,
+        //         'top_list' => $rankedDrivers->take(10),
+        //     ];
+        // });
+        
+     
+        // return response()->json($trips);
+        
+        
+
+
+
+
+
+
+
+
+        $startDate = Carbon::now()->startOfYear();
+$endDate = Carbon::now()->endOfYear();
+
+// Fetch trips with completed status within the date range
+$trips = Trip::
+    whereBetween('created_at', [$startDate, $endDate])
+    ->orderBy('created_at')
+    ->get();
+
+$collection = collect($trips);
+
+// Group trips by month
+$trips = $collection->groupBy(function ($trip) {
+    return Carbon::parse($trip->created_at)->format('Y-m');
+})->map(function ($group) {
+    // Group by driver_id and get drivers with total trips
+    $drivers = $group->groupBy('driver_id')->map(function ($driverTrips, $driverId) {
+        $user = User::find($driverId);
+
+        // Check if the user exists and has the 'user' role
+        if ($user && $user->roles()->where('name', 'user')->exists()) {
             return [
                 'driver_id' => $user->driver_id,
                 'name' => $user->name,
-                'email' => $user->email,
-                'total_trips' => $driver->total_trips,
-                'profile_image' => $user->userImage->profile_image,
-                'rank' => $index + 1 // Add rank field based on index
+                'total_trips' => $driverTrips->count(),
+                'profile_image' => optional($user->userImage)->profile_image,
             ];
-        });
+        }
+        return null;
+    })->filter()->sortByDesc('total_trips')->values(); // Sort and re-index
 
-        // Auth User's Rank
-        $authUserRank = $driverDetails->firstWhere('driver_id', $authUser->driver_id)['rank'] ?? null;
+    // Add ranking to drivers
+    $rankedDrivers = $drivers->map(function ($driver, $index) {
+        $driver['rank'] = $index + 1; // Add rank based on index
+        return $driver;
+    }); // Take top 10
 
-        // Top 10 Drivers
-        $topDrivers = $driverDetails->take(10);
+    $authUser = Auth::user();
+    $authUserRank = $rankedDrivers->firstWhere('driver_id', $authUser->driver_id);
 
-        // Response ပြန်ပေးရန်
-        return response()->json([
-            'auth_user' => [
-                'driver_id' => $authUser->driver_id,
-                'name' => $authUser->name,
-                'total_trips' => $authUser->trips->where('status','completed')->count(),
-                'profile_image' =>$authUser->userImage->profile_image,
-                'rank' => $authUserRank,
-                // other user fields
-            ],
-            'top_drivers' => $topDrivers,
-            'url'=>'https://s3.' . env('AWS_DEFAULT_REGION') . '.amazonaws.com/' . env('AWS_BUCKET') . '/',
-        ]);
+
+    return [
+        'date' => $group->first()->created_at->format('Y F'),
+        'authuser' => $authUserRank,
+        'top_list' => $rankedDrivers->take(10),
+    ];
+});
+
+
+
+return response()->json($trips);
+
+        
     }
     
 }
