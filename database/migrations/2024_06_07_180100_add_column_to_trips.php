@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('trips', function (Blueprint $table) {
-            $table->string('polyline')->after('extra_fee_list')->nullable();
+            $table->longText('polyline')->after('extra_fee_list')->nullable();
             
         });
     }

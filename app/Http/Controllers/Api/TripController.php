@@ -40,7 +40,7 @@ class TripController extends Controller
     public function store(Request $request)
     {
 
-        // dd($request);
+        
     
         $validator = Validator::make($request->all(), [
             'distance' => 'required|numeric',
@@ -86,6 +86,9 @@ class TripController extends Controller
                 $arr = [];
                 $fees =  json_encode($arr);
             }
+
+
+            
         if($request->trip_id == null || $request->trip_id == 'null'){
             
  
@@ -164,7 +167,7 @@ class TripController extends Controller
             }else{
                 $datafee = $fees;
             }
-            
+           
             $trip->extra_fee_list = $datafee;
 
             // $drivers = User::role('user')->with(['trips' => function ($query) {
