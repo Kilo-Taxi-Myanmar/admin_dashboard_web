@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row">            
+    <div class="row">
         <div class="col-lg-12">
             <div class="card card-block card-stretch">
                 <div class="card-body p-0">
@@ -20,7 +20,7 @@
                 <div class="card-body">
                     <div id="map" style="height: 600px;"></div>
                     {{-- <div id="maplegend" class="d-none">
-                        
+
                         <div>
                             <img src="{{ asset('images/online.png') }}" /> {{ __('message.online') }}
                         </div>
@@ -39,13 +39,17 @@
 </div>
 @endsection
 @push('script')
+{{-- gogle map   --}}
+<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAP_KEY')}}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAP_KEY')}}&libraries=geometry"></script>
+
 <script>
 	$(function(){
 		let map;
 		var marker = undefined;
 		var locations = [];
 		var taxiicon = ""
-		
+
 		function initialize() {
 			var myLatlng = new google.maps.LatLng(20.947940, 72.955786);
 			var myOptions = {
@@ -62,19 +66,19 @@
 		function changeMarkerPositions(locations)
 		{
 
-			
+
 			var infowindow = new google.maps.InfoWindow();
 			var markers = {};
 			if(locations.length > 0 )
 			{
 				for(i = 0 ; i < locations.length ; i++) {
 					// console.log("new "+locations[i].lat, locations[i].lng);
-				
+
 					if(markers[locations[i].id] ){
 						markers[locations[i].id].setMap(null); // set markers setMap to null to remove it from map
 						delete markers[locations[i].id]; // delete marker instance from markers object
 					}
-					
+
 					if( locations[i].active == 'active' && locations[i].available == 0) {
 						taxicon = "{{ asset('assets/icon/ontrip.png') }}";
 					} else if( locations[i].active == 'active' && locations[i].available == 1) {
@@ -89,8 +93,8 @@
 						title: locations[i].display_name,
 						driver_id: locations[i].id
 					});
-					
-				
+
+
 				}
 			}
 		}
@@ -99,7 +103,7 @@
 		if(window.google || window.google.maps) {
 			let users = @json($users);
 
-			
+
 			initialize();
 			changeMarkerPositions(users);
 			$('#maplegend').removeClass('d-none')
@@ -145,7 +149,7 @@
 <body>
     <div id="map" style="height: 500px; width: 100%;"></div>
 
-  
+
 
 </body>
 </html> --}}

@@ -4,7 +4,7 @@
 	<div class="container py-4">
         <div class="col-12 mx-0 mt-3 shadow-sm p-3">
 			<div class="row flex-lg-nowrap justify-content-between">
-                
+
                <div class="card col-12 col-md-5 col-lg-3 d-flex justify-content-center pt-3 m-1">
                    <div class="d-flex align-items-center ">
                     <div class="col-6">
@@ -100,10 +100,10 @@
                       </div>
                       <div class="card-body">
                         <ul id="drivercount" class="navbar-nav" style="height: 300px;overflow-y:auto;overflow-x:hidden">
-                        
-                          
+
+
                         </ul>
-    
+
                       </div>
                    </div>
                 </div>
@@ -350,6 +350,7 @@
                     document.querySelector(`#trip_${range}`).classList.remove('btn-secondary');
         }
 
+        const AWS_URL = '{{ env('AWS_URL') }}';
         async function driverTripCount(range) {
             await axios.get(`${domain}trip-count-driver/${range}`)
                     .then((resporn) => {
@@ -357,17 +358,17 @@
 
                         // console.log(drivercount)
                         drivercount.innerHTML ='';
-                     
+
                             resporn.data.forEach((item,idx)=>{
                                 drivercount.innerHTML += `
                             <li title="Driver Id : ${item.driver_id}" class="nav-item d-flex  align-items-center border-bottom pb-2 my-2">
                                     <span class="col-1">${idx +1}</span>
                                     <div class="d-flex col-7">
-                                        
-                                        <img class="" src="${item.user_image.profile_image === null ? domain+'assets/logo/user.png': 'uploads/images/profiles/'+item.user_image.profile_image}" alt="User"
+
+                                        <img class="" src="${item.user_image.profile_image === null ? domain+'assets/logo/user.png': AWS_URL +item.user_image.profile_image}" alt="User"
                                         style="width:3rem;height:3rem; object-fit: cover; object-position: center;border-radius:100%;margin-right:15px">
-                            
-        
+
+
                                         <div class="col-8 text-center">
                                             <div>${item.name}</div>
                                             <div>${item.phone}</div>
@@ -377,19 +378,19 @@
                                         <div>total trip</div>
                                         <div>${item.trips_count}</div>
                                     </div>
-        
+
                                 </li>
-                            
+
                             `;
                             //console.log(item)
-                            
+
                             })
 
-                       
-                        
-                                                
+
+
+
                         // console.log(resporn.data)
-                        
+
                     })
                     .catch((error) => {
                         // console.log(error)
@@ -398,9 +399,9 @@
                             <span class="visually-hidden">Loading...</span>
                             </div>
                             `;
-                        
+
                     })
-                
+
 
 
 
@@ -415,7 +416,7 @@
                     document.querySelector(`#trip_${range}`).classList.remove('btn-secondary');
         }
 
-      //start pusher driver trip count  
+      //start pusher driver trip count
       Pusher.logToConsole = true;
 
             var pusher = new Pusher('ff6d2dc3e07b1864a77d', {
@@ -430,8 +431,8 @@
             console.log(booking);
             });
 
-   
-     //   ebd pusher driver trip count 
+
+     //   ebd pusher driver trip count
          window.onload = function () {
             commissionChart('month');
             topupChart('month');

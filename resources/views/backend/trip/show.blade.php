@@ -28,13 +28,13 @@
                 <div class="card mb-3 h-100">
                     <div class="card-body position-relative">
                         <div class="d-flex flex-column justify-content-center align-items-center text-center overflow-hidden">
-                            
+
                             @if ($user->userImage && $user->userImage->profile_image && file_exists('uploads/images/profiles/'.$user->userImage->profile_image))
 
                                 <div class="">
                                     <img src="{{ asset('uploads/images/profiles/'. $user->userImage->profile_image) }}" alt="User"
                                         style="width:100%;height:20rem; object-fit:cover;object-position: center;">
-                                       
+
                                 </div>
                             @else
                                 <img class="" src="{{ asset('assets/logo/user.png') }}" alt="User"
@@ -65,7 +65,7 @@
                                     </li>
                                 </ul>
                             </div>
-                      
+
                     </div>
                 </div>
             </div>
@@ -74,7 +74,7 @@
 
             {{-- start trip detail --}}
             <div class="col-lg-6 mb-3">
-               
+
                 <div class="card mb-6 h-100">
                     <div class="card-header">
                         <div class="d-flex justify-content-between">
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                     <div class="card-body position-relative">
-                        
+
                         <div class="d-flex my-2 position-relative">
                             <div class="col-4">Trip ID</div>
                             <div class="col-1">:</div>
@@ -138,13 +138,13 @@
                             <div class="col-1">:</div>
                             <div> {{$trip->end_address === null ? 'No start address' : $trip->end_address}}</div>
                         </div>
-                       
-                        
+
+
                     </div>
                 </div>
             </div>
-                      
-                        
+
+
             {{-- end trip detail  --}}
 
 
@@ -154,13 +154,13 @@
                 <div class="card mb-3 h-100">
                     <div class="card-body position-relative">
                         <div class="d-flex flex-column justify-content-center align-items-center text-center overflow-hidden">
-                            
+
                             @if ($customer->userImage && $customer->userImage->profile_image && file_exists('uploads/images/profiles/'.$customer->userImage->profile_image))
 
                                 <div class="">
                                     <img src="{{ asset('uploads/images/profiles/'. $customer->userImage->profile_image) }}" alt="User"
                                         style="width:100%;height:20rem; object-fit:cover;object-position: center;">
-                                       
+
                                 </div>
                             @else
                                 <img class="" src="{{ asset('assets/logo/user.png') }}" alt="User"
@@ -191,7 +191,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        
+
                     </div>
                 </div>
 
@@ -199,13 +199,13 @@
                 <div class="card mb-3 h-100 position-relative">
                     <div class="card-body position-relative">
                         <div class="d-flex flex-column justify-content-center align-items-center text-center overflow-hidden">
-                   
+
                                 <div class="">
                                     <img class="" src="{{ asset('assets/logo/user.png') }}" alt="User"
                                     style="width: 10rem;height: 10rem; object-fit: cover; object-position: center;">
-                           
+
                                 </div>
-                          
+
 
                             <div class="mt-3">
                                 <h3>No search</h3>
@@ -231,7 +231,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        
+
                     </div>
                     <div class="position-absolute w-100 h-100" style="background:#ffffff98">
                         <div class="position-absolute top-50 shadow-lg" style="transform: translateY(-50%)">
@@ -241,9 +241,9 @@
                         </div>
                     </div>
                 </div>
-                  
+
                 @endif
-                
+
             </div>
             {{-- end customer  --}}
             {{-- <div class="col-lg-8 mb-3">
@@ -367,7 +367,7 @@
                                             <th scope="col">Total Cost</th>
                                             <th scope="col">Start address</th>
                                             <th scope="col">End address</th>
-                                            
+
 
                                             <th scope="col">Date</th>
                                         </tr>
@@ -426,8 +426,12 @@
 
 @endsection
 @push('script')
+{{-- gogle map   --}}
+<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAP_KEY')}}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAP_KEY')}}&libraries=geometry"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   
+
 	<script>
         const domain = window.location.href;
         let chartInstance = null;
@@ -515,7 +519,7 @@
         }
 
 
-        //map 
+        //map
 
         function initMap() {
             // Decode polyline data

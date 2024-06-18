@@ -8,13 +8,13 @@
                 <div class="card mb-3 h-100">
                     <div class="card-body position-relative">
                         <div class="d-flex flex-column justify-content-center align-items-center text-center overflow-hidden">
-                            
+
                             @if ($user->userImage && $user->userImage->profile_image && file_exists('uploads/images/profiles/'.$user->userImage->profile_image))
-                           
+
                                 <div class="">
                                     <img src="{{ asset('uploads/images/profiles/'. $user->userImage->profile_image) }}" alt="User"
                                         style="width:100%;height:20rem; object-fit:cover;object-position: center;">
-                                       
+
                                 </div>
                             @else
                                 <img class="" src="{{ asset('assets/logo/user.png') }}" alt="User"
@@ -93,7 +93,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                               
+
                                 <div class="d-flex justify-content-between">
                                     <div class="d-flex flex-row gap-2">
                                         <div class=" col-8 bg-primary text-white p-2 rounded text-center">{{ "Balance : ".$user->balance }}</div>
@@ -224,16 +224,18 @@
 @endsection
 @push('script')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    {{-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHWnJ99eF2wvCJdFgIRIkpBYyEuZwazFM"></script> --}}
-	<script>
-       
-      
-       
-       
-       
+    {{-- gogle map   --}}
+	<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAP_KEY')}}"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAP_KEY')}}&libraries=geometry"></script>
+{{--    pusher --}}
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+   <script>
 
-       
-       
+
+
+
+
+
        const domain = window.location.href;
         let chartInstance = null;
 
@@ -319,22 +321,53 @@
                 });
         }
 
- 
-         // map 
-         let user = @json($user);
+
+         // map
+
+
+       Pusher.logToConsole = true;
+
+       let pusher = new Pusher('ff6d2dc3e07b1864a77d', {
+           cluster: 'ap1'
+       });
+
+       let user = @json($user);
+       console.log(user.id)
+
+       let channel = pusher.subscribe('driver-location-channel');
+       channel.bind('driver-location-event', function(data) {
+           //   alert(JSON.stringify(data));\
+
+           // let locations = JSON.stringify(data)
+
+           let drivers = data.drivers;
+
+           drivers.forEach(driver=>{
+
+               if(driver.id=== user.id){
+                   changeMarkerPositions(driver);
+               }
+
+           });
+           // console.log(drivers);
+       });
+
+
+
+
          let latitude = user.lat;
-        var longitude = user.lng;
+        let longitude = user.lng;
         let taxicon = '';
 
         // console.log(latitude,longitude ,user)
 
-   
-        
+
+
         function initialize() {
 			var myLatlng = new google.maps.LatLng(latitude, longitude);
 			var myOptions = {
 				zoom: 15.5,
-                
+
 				center: myLatlng,
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			}
@@ -347,14 +380,15 @@
         function changeMarkerPositions(locations)
 		{
 
-			
+
 			var infowindow = new google.maps.InfoWindow();
-			var markers = {};
+            if (!locations.lat || !locations.lng) return;
+            var markers = {};
 			if(markers[locations.id] ){
 						markers[locations.id].setMap(null); // set markers setMap to null to remove it from map
 						delete markers[locations.id]; // delete marker instance from markers object
 					}
-					
+
 					if( locations.active == 'active' && locations.available == 0) {
 						taxicon = "{{ asset('assets/icon/ontrip.png') }}";
 					} else if( locations.active == 'active' && locations.available == 1) {
@@ -362,31 +396,37 @@
 					} else {
 						taxicon = "{{ asset('assets/icon/offline.png') }}";
 					}
+                if (markers[location.id]) {
+                    // Remove the old marker
+                    markers[location.id].setMap(null);
+                    delete markers[location.id];
+                }
 					marker = new google.maps.Marker({
 						position:  new google.maps.LatLng( parseFloat(locations.lat)  + (Math.random() -.5) / 1500, parseFloat(locations.lng) + (Math.random() -.5) / 1500 ),
 						map: map,
 						icon: taxicon,
-                        
+
 						driver_id: locations.id
 					});
-					
+
 		}
 
+       changeMarkerPositions(user)
 
         window.onload = function() {
             initialize()
             changeMarkerPositions(user)
         }
-       
-       
-       
-       
+
+
+
+
     //    --------------------------------
-       
-       
-       
+
+
+
 
     </script>
-    
+
 
 @endpush

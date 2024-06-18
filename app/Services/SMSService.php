@@ -15,7 +15,7 @@ class SMSService
         $this->apiKey = config('smspost.api_key');
     }
 
-    public function sendOTP($phoneNumber, $otp, $senderName = 'SMSPoh')
+    public function sendOTP($phoneNumber, $otp, $senderName = 'KTM ')
     {
         $response = $this->client->post('https://smspoh.com/api/v2/send', [
             'headers' => [

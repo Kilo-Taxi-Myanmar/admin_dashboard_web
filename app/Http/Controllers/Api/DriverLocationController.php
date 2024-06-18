@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\TripNearDriverAllEvent;
+use App\Events\DriverLocationUpdate;
 use App\Http\Controllers\Controller;
 use App\Models\CarType;
 use App\Models\User;
@@ -18,12 +18,12 @@ class DriverLocationController extends Controller
     public function neardriverall(Request $request){
         $latitude = $request->start_lat;
         $longitude = $request->start_lng;
-       
-               
+
+
         $radius = 5;
-        
+
         $cartype = intval($request->cartype);
-        
+
 
 
         $nearbyDriver = User::role('user')
@@ -68,31 +68,31 @@ class DriverLocationController extends Controller
 
     public function driverall(){
         $driver = User::role('user')->get();
-        
-        
+
+
         return response()->json($driver);
-        
-        
+
+
     }
 
     public function driverallcustomer(){
         $driver = User::role('user')->where('available',true)->get();
-        
-        
+
+
         return response()->json($driver);
-       
-        
+
+
     }
 
     public function cartype(){
         $cartypes = CarType::all();
 
         return response()->json($cartypes);
-        
+
     }
 
 
-    
+
     public function driverupdate(Request $request,$id){
         $validator = Validator::make($request->all(), [
             'lat' => 'required',
@@ -115,7 +115,10 @@ class DriverLocationController extends Controller
             'lat'=>$request->lat,
             'lng' =>$request->lng
         ];
-        
+
+        $driver= User::role('user')->get();
+        broadcast(new DriverLocationUpdate($driver));
+//
 
         return response()->json(['driver'=>$user ,'message' => 'Driver updated successfully'], 200);
     }
