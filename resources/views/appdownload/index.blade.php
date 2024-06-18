@@ -9,9 +9,9 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
 	<title>{{ config('app.name', 'SPD Kilo Taxt') }}</title>
-	<link href="{{ asset('assets/icon/apple-touch-icon.png') }}" rel="apple-touch-icon" sizes="180x180">
-	<link type="image/png" href="{{ asset('assets/icon/favicon-32x32.png') }}" rel="icon" sizes="32x32">
-	<link type="image/png" href="{{ asset('assets/icon/favicon-16x16.png') }}" rel="icon" sizes="16x16">
+    <link href="{{ asset('assets/logo/ktm.png') }}" rel="apple-touch-icon" sizes="180x180">
+    <link type="image/png" href="{{ asset('assets/logo/ktm.png') }}" rel="icon" sizes="32x32">
+    <link type="image/png" href="{{ asset('assets/logo/ktm.png') }}" rel="icon" sizes="16x16">
 	<link href="{{ asset('assets/icon/site.webmanifest') }}" rel="manifest">
 	<!-- Fonts -->
 	<link href="//fonts.gstatic.com" rel="dns-prefetch">
@@ -36,29 +36,32 @@
 	<div id="app">
 		<div class="row justify-content-center align-items-center vh-100 m-0">
 			<div class="">
-				<div class=" text-center w-100 mb-5">
-					<img src="{{ asset('assets/logo/vector-users-icon.jpg') }}" alt="" width="25%" height="">
-				</div>
+                <div class=" text-center w-100 d-none d-sm-block">
+                    <img src="{{ asset('assets/logo/ktm.png') }}" alt="" width="15%" height="">
+                </div>
+                <div class=" text-center w-100 d-sm-none">
+                    <img src="{{ asset('assets/logo/ktm.png') }}" alt="" width="50%" height="">
+                </div>
 				<div class="row justify-content-center mt-5">
 					<ul class="nav justify-content-center">
-						{{-- <li class="mx-3">
-						<a href="{{route('customer.app')}}" class="text-decoration-none btn btn-primary btn-sm ">SPTS Customer</a>
+						 <li class="mx-3">
+						<a href="{{route('customer.app')}}" class="text-decoration-none btn btn-primary btn-sm d-none">KTM Customer</a>
 					</li>
 					<li class="mx-3">
-						<a href="{{route('driver.app')}}" class="text-decoration-none btn btn-primary btn-sm ">SPTS Driver</a>
-					</li> --}}
-					<li class="mx-3">
-						<a href="https://drive.google.com/file/d/10yunlgfejY4mSy1xbg80vW29GlK5DhWH/view?usp=drive_link" class="text-decoration-none btn btn-primary btn-sm ">SPTS Customer</a>
+						<a href="{{route('driver.app')}}" class="text-decoration-none btn btn-primary btn-sm " >Kilo Taxi Myanmar (version 2.0.0+24) </a>
 					</li>
-					<li class="mx-3">
-						<a href="https://drive.google.com/file/d/1bdGtvzr9WAB0mGQfLPVYotBxhm9ZAfCC/view?usp=drive_link" class="text-decoration-none btn btn-primary btn-sm ">SPTS Driver</a>
-					</li>
+{{--					<li class="mx-3">--}}
+{{--						<a href="https://drive.google.com/file/d/10yunlgfejY4mSy1xbg80vW29GlK5DhWH/view?usp=drive_link" class="text-decoration-none btn btn-primary btn-sm ">SPTS Customer</a>--}}
+{{--					</li>--}}
+{{--					<li class="mx-3">--}}
+{{--						<a href="https://drive.google.com/file/d/1bdGtvzr9WAB0mGQfLPVYotBxhm9ZAfCC/view?usp=drive_link" class="text-decoration-none btn btn-primary btn-sm ">SPTS Driver</a>--}}
+{{--					</li>--}}
 					</ul>
 				</div>
 			</div>
 		</div>
 		<div style="margin-top: -2rem">
-			<p class="text-center small fw-bold">Copyright &copy; 2023 Shwe Padauk. All right reserved</p>
+			<p class="text-center small fw-bold">Copyright &copy; 2024 {{env('APP_NAME')}}. All right reserved</p>
 		</div>
 	</div>
 	<script>

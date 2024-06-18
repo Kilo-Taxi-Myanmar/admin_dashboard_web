@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 class AppDownloadController extends Controller
 {
     public function customerDownload(){
-       
+
         {
-            
-            $filePath = storage_path('app/spts customer.apk');
-            
+
+            $filePath = storage_path('app/Kilo Taxi.apk');
+
             // Check if the file exists
             if (file_exists($filePath)) {
                 // Return the file as a response
@@ -24,8 +24,8 @@ class AppDownloadController extends Controller
     }
 
     public function driverDownload(){
-        $filePath = storage_path('app/spts driver.apk');
-            
+        $filePath = storage_path('app/Kilo Taxi.apk');
+
             // Check if the file exists
             if (file_exists($filePath)) {
                 // Return the file as a response
