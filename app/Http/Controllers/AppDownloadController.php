@@ -10,7 +10,7 @@ class AppDownloadController extends Controller
 
         {
 
-            $filePath = storage_path('app/Kilo Taxi.apk');
+            $filePath = storage_path('app/Kilo Taxi Myanmar.apk');
 
             // Check if the file exists
             if (file_exists($filePath)) {
@@ -24,7 +24,7 @@ class AppDownloadController extends Controller
     }
 
     public function driverDownload(){
-        $filePath = storage_path('app/Kilo Taxi.apk');
+        $filePath = storage_path('app/Kilo Taxi Myanmar.apk');
 
             // Check if the file exists
             if (file_exists($filePath)) {
