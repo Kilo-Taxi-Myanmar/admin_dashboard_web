@@ -23,15 +23,17 @@ class DriverLocationUpdate implements ShouldBroadcast
     public  $drivers;
     public function __construct($drivers)
     {
-        $this->drivers = $drivers->map(function ($driver) {
-            return [
-                'id'=>$driver->id,
-                'name' => $driver->name,
-                'phone' => $driver->phone,
-                'lat' => $driver->lat,
-                'lng' => $driver->lng,
-            ];
-        });
+//        $this->drivers = $drivers->map(function ($driver) {
+//            return [
+//                'id'=>$driver->id,
+//                'name' => $driver->name,
+//                'phone' => $driver->phone,
+//                'lat' => $driver->lat,
+//                'lng' => $driver->lng,
+//            ];
+//        });
+
+        $this->drivers =$drivers;
     }
 
     /**

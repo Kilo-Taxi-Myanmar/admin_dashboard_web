@@ -47,7 +47,7 @@ class DriverLocationController extends Controller
 
             if($nearbyDriver){
 
-                broadcast(new TripNearDriverAllEvent($nearbyDriver))->toOthers();
+//                broadcast(new TripNearDriverAllEvent($nearbyDriver))->toOthers();
 
                 return response()->json($nearbyDriver, 200);
             }else{
@@ -117,7 +117,7 @@ class DriverLocationController extends Controller
         ];
 
         $driver= User::role('user')->get();
-        broadcast(new DriverLocationUpdate($driver));
+        broadcast(new DriverLocationUpdate($user));
 //
 
         return response()->json(['driver'=>$user ,'message' => 'Driver updated successfully'], 200);

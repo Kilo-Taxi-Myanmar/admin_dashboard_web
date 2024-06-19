@@ -45,7 +45,7 @@
 				<div class="row justify-content-center mt-5">
 					<ul class="nav justify-content-center">
 						 <li class="mx-3">
-						<a href="{{route('customer.app')}}" class="text-decoration-none btn btn-primary btn-sm d-none">KTM Customer</a>
+						<a href="{{route('customer.app')}}" class="text-decoration-none btn btn-primary btn-sm d-none" download>KTM Customer</a>
 					</li>
 					<li class="mx-3">
 						<a href="{{route('driver.app')}}" class="text-decoration-none btn btn-primary btn-sm " >Kilo Taxi Myanmar (version 2.0.0+24) </a>

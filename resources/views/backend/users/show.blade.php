@@ -325,97 +325,104 @@
          // map
 
 
-       Pusher.logToConsole = true;
+       {{--Pusher.logToConsole = true;--}}
 
-       let pusher = new Pusher('ff6d2dc3e07b1864a77d', {
-           cluster: 'ap1'
-       });
+       {{--let pusher = new Pusher('ff6d2dc3e07b1864a77d', {--}}
+       {{--    cluster: 'ap1'--}}
+       {{--});--}}
 
-       let user = @json($user);
-       console.log(user.id)
+       {{--let user = @json($user);--}}
+       {{--// console.log(user.id)--}}
 
-       let channel = pusher.subscribe('driver-location-channel');
-       channel.bind('driver-location-event', function(data) {
-           //   alert(JSON.stringify(data));\
+       {{--let latitude = user.lat;--}}
+       {{--let longitude = user.lng;--}}
 
-           // let locations = JSON.stringify(data)
+       {{--let channel = pusher.subscribe('driver-location-channel');--}}
+       {{--channel.bind('driver-location-event', function(data) {--}}
+       {{--    //   alert(JSON.stringify(data));\--}}
 
-           let drivers = data.drivers;
+       {{--    // let locations = JSON.stringify(data)--}}
 
-           drivers.forEach(driver=>{
+       {{--    let drivers = data.drivers;--}}
 
-               if(driver.id=== user.id){
-                   changeMarkerPositions(driver);
-               }
+       {{--    drivers.forEach(driver=>{--}}
 
-           });
-           // console.log(drivers);
-       });
+       {{--        if(driver.id=== user.id){--}}
+       {{--            // if(latitude !== driver.lat || longitude !== driver.lng){--}}
+       {{--            //     changeMarkerPositions(driver);--}}
+       {{--            // }--}}
 
+       {{--            changeMarkerPositions(driver);--}}
 
+       {{--        }--}}
 
-
-         let latitude = user.lat;
-        let longitude = user.lng;
-        let taxicon = '';
-
-        // console.log(latitude,longitude ,user)
-
+       {{--    });--}}
+       {{--    // console.log(drivers);--}}
+       {{--});--}}
 
 
-        function initialize() {
-			var myLatlng = new google.maps.LatLng(latitude, longitude);
-			var myOptions = {
-				zoom: 15.5,
-
-				center: myLatlng,
-				mapTypeId: google.maps.MapTypeId.ROADMAP
-			}
-			map = new google.maps.Map(document.getElementById('map'), myOptions);
-			const legend = document.getElementById("maplegend");
-
-			map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend)
-		}
-
-        function changeMarkerPositions(locations)
-		{
 
 
-			var infowindow = new google.maps.InfoWindow();
-            if (!locations.lat || !locations.lng) return;
-            var markers = {};
-			if(markers[locations.id] ){
-						markers[locations.id].setMap(null); // set markers setMap to null to remove it from map
-						delete markers[locations.id]; // delete marker instance from markers object
-					}
 
-					if( locations.active == 'active' && locations.available == 0) {
-						taxicon = "{{ asset('assets/icon/ontrip.png') }}";
-					} else if( locations.active == 'active' && locations.available == 1) {
-						taxicon = "{{ asset('assets/icon/online.png') }}";
-					} else {
-						taxicon = "{{ asset('assets/icon/offline.png') }}";
-					}
-                if (markers[location.id]) {
-                    // Remove the old marker
-                    markers[location.id].setMap(null);
-                    delete markers[location.id];
-                }
-					marker = new google.maps.Marker({
-						position:  new google.maps.LatLng( parseFloat(locations.lat)  + (Math.random() -.5) / 1500, parseFloat(locations.lng) + (Math.random() -.5) / 1500 ),
-						map: map,
-						icon: taxicon,
+       {{-- let taxicon = '';--}}
 
-						driver_id: locations.id
-					});
+       {{-- // console.log(latitude,longitude ,user)--}}
 
-		}
 
-       changeMarkerPositions(user)
+
+       {{-- function initialize() {--}}
+		{{--	var myLatlng = new google.maps.LatLng(latitude, longitude);--}}
+		{{--	var myOptions = {--}}
+		{{--		zoom: 15.5,--}}
+
+		{{--		center: myLatlng,--}}
+		{{--		mapTypeId: google.maps.MapTypeId.ROADMAP--}}
+		{{--	}--}}
+		{{--	map = new google.maps.Map(document.getElementById('map'), myOptions);--}}
+		{{--	const legend = document.getElementById("maplegend");--}}
+
+		{{--	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend)--}}
+		{{--}--}}
+
+       {{-- function changeMarkerPositions(locations)--}}
+		{{--{--}}
+
+
+		{{--	// var infowindow = new google.maps.InfoWindow();--}}
+       {{--     if (!locations.lat || !locations.lng) return;--}}
+       {{--     var markers = {};--}}
+		{{--	if(markers[locations.id] ){--}}
+		{{--				markers[locations.id].setMap(null); // set markers setMap to null to remove it from map--}}
+		{{--				delete markers[locations.id]; // delete marker instance from markers object--}}
+		{{--			}--}}
+
+		{{--			if( locations.active == 'active' && locations.available == 0) {--}}
+		{{--				taxicon = "{{ asset('assets/icon/ontrip.png') }}";--}}
+		{{--			} else if( locations.active == 'active' && locations.available == 1) {--}}
+		{{--				taxicon = "{{ asset('assets/icon/online.png') }}";--}}
+		{{--			} else {--}}
+		{{--				taxicon = "{{ asset('assets/icon/offline.png') }}";--}}
+		{{--			}--}}
+       {{--         if (markers[location.id]) {--}}
+       {{--             // Remove the old marker--}}
+       {{--             markers[location.id].setMap(null);--}}
+       {{--             delete markers[location.id];--}}
+       {{--         }--}}
+		{{--			marker = new google.maps.Marker({--}}
+		{{--				position:  new google.maps.LatLng( parseFloat(locations.lat)  + (Math.random() -.5) / 1500, parseFloat(locations.lng) + (Math.random() -.5) / 1500 ),--}}
+		{{--				map: map,--}}
+		{{--				icon: taxicon,--}}
+
+		{{--				driver_id: locations.id--}}
+		{{--			});--}}
+
+		{{--}--}}
+
+
 
         window.onload = function() {
             initialize()
-            changeMarkerPositions(user)
+            // changeMarkerPositions(user)
         }
 
 
