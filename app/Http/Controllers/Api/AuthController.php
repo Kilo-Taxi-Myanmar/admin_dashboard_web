@@ -67,7 +67,7 @@ class AuthController extends Controller
         // $user->driver_id = sprintf('%04d', $user->id - 1);
         $lastUser = User::orderBy('id', 'desc')->first();
         $nextId = $lastUser ? $lastUser->id + 1 : 1;
-        $user->driver_id = 'KTM-' . str_pad($nextId, 5, STR_PAD_LEFT);
+        $user->driver_id = 'KTM-' . str_pad($nextId, 4,'0', STR_PAD_LEFT);
         $user->fill($request->only(['birth_date', 'address', 'nrc_no', 'driving_license']));
 
         $user->save();

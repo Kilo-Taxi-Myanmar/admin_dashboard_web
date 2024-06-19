@@ -229,6 +229,8 @@
 	<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAP_KEY')}}&libraries=geometry"></script>
 {{--    pusher --}}
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.11.0/echo.iife.js"></script>
+{{--    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>--}}
    <script>
 
 
@@ -325,7 +327,7 @@
          // map
 
 
-       {{--Pusher.logToConsole = true;--}}
+       // Pusher.logToConsole = true;
 
        {{--let pusher = new Pusher('ff6d2dc3e07b1864a77d', {--}}
        {{--    cluster: 'ap1'--}}
@@ -348,11 +350,11 @@
        {{--    drivers.forEach(driver=>{--}}
 
        {{--        if(driver.id=== user.id){--}}
-       {{--            // if(latitude !== driver.lat || longitude !== driver.lng){--}}
-       {{--            //     changeMarkerPositions(driver);--}}
-       {{--            // }--}}
+       {{--            if(latitude !== driver.lat || longitude !== driver.lng){--}}
+       {{--                changeMarkerPositions(driver);--}}
+       {{--            }--}}
 
-       {{--            changeMarkerPositions(driver);--}}
+       {{--            // changeMarkerPositions(driver);--}}
 
        {{--        }--}}
 
@@ -396,9 +398,9 @@
 		{{--				delete markers[locations.id]; // delete marker instance from markers object--}}
 		{{--			}--}}
 
-		{{--			if( locations.active == 'active' && locations.available == 0) {--}}
+		{{--			if( locations.active === 'active' && locations.available === 0) {--}}
 		{{--				taxicon = "{{ asset('assets/icon/ontrip.png') }}";--}}
-		{{--			} else if( locations.active == 'active' && locations.available == 1) {--}}
+		{{--			} else if( locations.active === 'active' && locations.available === 1) {--}}
 		{{--				taxicon = "{{ asset('assets/icon/online.png') }}";--}}
 		{{--			} else {--}}
 		{{--				taxicon = "{{ asset('assets/icon/offline.png') }}";--}}
@@ -418,12 +420,79 @@
 
 		{{--}--}}
 
+       let map;
+       let marker;
+       let icon = {
+           url: "{{ asset('assets/icon/online.png') }}", // URL to your car icon
+           scaledSize: new google.maps.Size(30, 30) // Size of the icon
+       };
+
+       let user = @json($user);
+       // console.log(user.id)
+
+       let latitude = +user.lat;
+       let longitude = +user.lng;
+
+       function initMap() {
+           let initialLocation = {lat: latitude, lng: longitude};
+           map = new google.maps.Map(document.getElementById('map'), {
+               zoom: 15.5,
+               center: initialLocation
+           });
+
+           marker = new google.maps.Marker({
+               position: initialLocation,
+               map: map,
+               icon: icon,
+               title: 'Driver Location'
+           });
+       }
+
+       window.onload = function() {
+           initMap();
+       };
+
+       // Initialize Pusher and Laravel Echo
+       Pusher.logToConsole = true;
+
+       let pusher = new Pusher('ff6d2dc3e07b1864a77d', {
+           cluster: 'ap1'
+       });
+
+       let echo = new Echo({
+           broadcaster: 'pusher',
+           key: 'ff6d2dc3e07b1864a77d',
+           cluster: 'ap1',
+           forceTLS: true
+       });
+
+       // Listen for location updates
+       echo.channel('driver-location-channel')
+           .listen('driver-location-event', (data) => {
 
 
-        window.onload = function() {
-            initialize()
+               let drivers = data.drivers;
+                console.log(data);
+                console.log(user.id);
+               drivers.forEach(driver=>{
+                   if(driver.id === user.id){
+                       console.log(driver);
+                       let newLocation = {lat: driver.lat, lng: driver.lng};
+
+                       // Update the marker position
+                       marker.setPosition(newLocation);
+                       map.setCenter(newLocation);
+                   }
+               })
+
+           });
+
+
+        // window.onload = function() {
+            // initialize()
             // changeMarkerPositions(user)
-        }
+            // initMap();
+        // }
 
 
 

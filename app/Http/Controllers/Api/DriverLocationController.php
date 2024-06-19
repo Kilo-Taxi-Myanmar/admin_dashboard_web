@@ -117,7 +117,7 @@ class DriverLocationController extends Controller
         ];
 
         $driver= User::role('user')->get();
-        broadcast(new DriverLocationUpdate($user));
+//        broadcast(new DriverLocationUpdate($user));
 //
 
         return response()->json(['driver'=>$user ,'message' => 'Driver updated successfully'], 200);
