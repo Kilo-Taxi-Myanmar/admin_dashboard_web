@@ -417,19 +417,19 @@
         }
 
       //start pusher driver trip count
-      Pusher.logToConsole = true;
-
-            var pusher = new Pusher('ff6d2dc3e07b1864a77d', {
-            cluster: 'ap1'
-            });
-
-            var channel = pusher.subscribe('driver-list-channel');
-            channel.bind('driver-list-event', function(data) {
-            //   alert(JSON.stringify(data));\
-
-                    let booking = JSON.stringify(data)
-            console.log(booking);
-            });
+      // Pusher.logToConsole = true;
+      //
+      //       var pusher = new Pusher('ff6d2dc3e07b1864a77d', {
+      //       cluster: 'ap1'
+      //       });
+      //
+      //       var channel = pusher.subscribe('driver-list-channel');
+      //       channel.bind('driver-list-event', function(data) {
+      //       //   alert(JSON.stringify(data));\
+      //
+      //               let booking = JSON.stringify(data)
+      //       console.log(booking);
+      //       });
 
 
      //   ebd pusher driver trip count

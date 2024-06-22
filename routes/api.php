@@ -42,7 +42,7 @@ Route::get('/app-link', [ChangeLogController::class, 'appLink']);
 Route::middleware(['auth:sanctum'])->group(function () {
     // our routes to be protected will go in here
     Route::post('/logout', [AuthController::class, 'logout']);
-    
+
     Route::post('refresh', [AuthController::class, 'refresh']);
 
 
@@ -54,12 +54,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/user/{user}', [UserController::class, 'destroy']);
     Route::get('/user/delete/{user}',[UserController::class,'disable']);
     Route::get('user/trip', [UserController::class, 'userTrip']);//user trip history
-    
+
     Route::get('user/notifications', [UserController::class, 'userNoti']);
 
-   
-  
-   
+
+
+
 
     //routes for transactions
     Route::get('/user/transactions', [TransactionController::class, 'index']);
@@ -68,7 +68,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/notification', [NotificationController::class, 'store']);
 
     //routes for balance,initial-fee,commission-fee
-    
+
     Route::get('/initial-fee', [SystemController::class, 'getInitialFee']);
     Route::get('/normal-fee', [SystemController::class, 'getNormalFee']);
     Route::get('/commission-fee', [SystemController::class, 'getCommissionFee']);
@@ -78,8 +78,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/custom-notification', [NotificationController::class, 'custom_notification']);
 
 
-   
-    // driver route 
+
+    // driver route
     Route::get('driver/all', [DriverLocationController::class, 'driverall']);
     Route::post('driver/update/{id}', [DriverLocationController::class, 'driverupdate']);
     Route::get('extra-fee',[TripStatusController::class,'extraFee']);
@@ -89,7 +89,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/total/price-and-trip/{range}',[UserController::class,'totalTripandPrice']);//total trip count and price
 
 
-    // customer route 
+    // customer route
     Route::get('/car/type',[DriverLocationController::class,'cartype']);
     Route::get('/fee', [FeeController::class, 'index']);
     Route::apiResource('/trip', TripController::class, array("as" => "api")); //trip post  end  get
@@ -98,10 +98,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/trip/driver/update/{id}',[CustromerTripController::class,'tripindriverid']);
     Route::get('available/driver/all', [DriverLocationController::class, 'driverallcustomer']);
-    
 
 
-    // booking 
+
+    // booking
     // Route::get('customer/trip/data',[CustromerTripController::class,'index']);
     // Route::apiResource('/customer/trip', CustromerTripController::class, array("as" => "api"));//trip create and trip get custromer
     Route::post('customer/trip/update/{id}',[CustromerTripController::class,'update']);
@@ -109,37 +109,61 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('customer/booking',[CustromerTripController::class,'store']);
     Route::get('/customer/active-booking',[CustromerTripController::class,'activeBooking']);
 
-    // driver and customer 
+    // driver and customer
     Route::post('trip/status/update/{id}',[TripController::class,'tripStatusupdate']);
     Route::post('change/password',[ForgetPasswordController::class,'changePassword']);
     Route::get('/top/lists',[UserController::class,'topLists']);
-    
 
-    // test 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // test
     Route::get('driver/search',[DriverSearchController::class,'searcTripnearhDriver']);
     Route::post('driver/cancel/search/driver',[DriverSearchController::class,'drivercancleanotherdriver']);
     Route::post('/driver/trip/end/{id}',[TripStatusController::class,'end']);
     Route::get('/driver/trip/cash/{id}',[TripStatusController::class,'cash']);
 
 
-    
+
 });
 
 
-    // customer route 
+    // customer route
     Route::get('/get-fee', [SystemController::class, 'getFee']);
     //send otp customer and forget password
     Route::post('/verify/otp',[AuthController::class,'verifyOtp']);
     Route::post('/send-otp', [AuthController::class, 'sendOTP']);
 
-    // forget password 
+    // forget password
     Route::post('forget/password',[ForgetPasswordController::class,'forgetPassword']);
-   
+
     Route::post('/check/phone',[AuthController::class,'checkphone']);
 
 
     Route::get('/config',[configController::class,'config']);
     Route::post('/config/add',[configController::class,'configstore']);
-    
+
 
 

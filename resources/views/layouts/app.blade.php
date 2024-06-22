@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
@@ -33,7 +33,7 @@
 </head>
 
 <body>
-	<div id="loader"></div>
+{{--	<div id="loader"></div>--}}
 	<div id="app">
 		<div class="row m-0">
 			@include('layouts.left-nav')
@@ -54,27 +54,29 @@
 
 
 	<script>
-		let loader = document.getElementById("loader");
-		window.addEventListener("load", function() {
-			loader.style.display = "none";
-			window.scrollTo(0, 0);
-		}, );
+		// let loader = document.getElementById("loader");
+		// window.addEventListener("load", function() {
+		// 	loader.style.display = "none";
+		// 	window.scrollTo(0, 0);
+		// }, );
 
-		const socket = new WebSocket('ws://127.0.0.1:8000');
+		// const socket = new WebSocket('wss://127.0.0.1:8000');
+        //
+		// socket.onopen = function(event) {
+		// 	console.log('WebSocket connection established.');
+		// };
+        //
+		// socket.onmessage = function(event) {
+		// 	const data = JSON.parse(event.data);
+		// 	if (data.event === 'locationUpdated') {
+		// 		// Handle location update
+		// 		console.log('Location update received:', data);
+		// 	}
+		// };
 
-		socket.onopen = function(event) {
-			console.log('WebSocket connection established.');
-		};
 
-		socket.onmessage = function(event) {
-			const data = JSON.parse(event.data);
-			if (data.event === 'locationUpdated') {
-				// Handle location update
-				console.log('Location update received:', data);
-			}
-		};
 
-	</script>
+    </script>
 	@stack('script')
 </body>
 

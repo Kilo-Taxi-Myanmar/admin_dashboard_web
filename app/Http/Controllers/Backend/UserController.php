@@ -34,6 +34,10 @@ class UserController extends Controller
     }
 
 
+
+
+
+
     public function activeUser()
     {
         // Use the query builder to construct the SQL query
@@ -91,7 +95,7 @@ class UserController extends Controller
 
 
 
-        
+
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|unique:users,phone|max:255',
@@ -119,7 +123,7 @@ class UserController extends Controller
                 'password' => Hash::make($validatedData['password']),
             ])->assignRole('user');
             $user->driver_id = sprintf('%04d', $user->id - 1);
-           
+
         } catch (ValidationException $e) {
             return back()->withErrors($e->getMessage());
         }
@@ -131,7 +135,7 @@ class UserController extends Controller
         // ]);
 
         $cartypes = array_map('intval', $request->type);
-      
+
         $vehicle = new Vehicle();
         $vehicle->user_id = $user->id;
         $vehicle->type = json_encode($cartypes);
@@ -148,7 +152,7 @@ class UserController extends Controller
             $vehicleImage->storeAs('uploads/images/vehicles', $vehicleImageName);
             $vehicle->vehicle_image_url = $vehicleImageName;
         }
-        
+
 
         $validateImage = $request->validate([
             'profile_image' => 'required|image',
@@ -202,7 +206,7 @@ class UserController extends Controller
         // }
 
         // save user images to database
-        
+
         $vehicle->save();
         $userImage->save();
         $user->save();
@@ -225,7 +229,7 @@ class UserController extends Controller
         $longitude = $driver->longitude;
 
         return view('backend.users.show', compact('user', 'transactions', 'trips', 'tripsCount', 'latitude', 'longitude'));
-    
+
     }
 
 
@@ -254,7 +258,7 @@ class UserController extends Controller
             'type' =>'required',
             'profile_image' => 'nullable|image',
 
-            
+
         ]);
         // dd($request);
 
@@ -373,7 +377,7 @@ class UserController extends Controller
         //     $vehicleImage->storeAs('uploads/images/vehicles', $vehicleImageName);
         //     $vehicle->vehicle_image_url = $vehicleImageName;
         // }
-    
+
         $vehicle->save();
         return redirect()->route('users.index', ['user' => $user]);
     }
@@ -771,7 +775,7 @@ class UserController extends Controller
     public function sendOTP(Request $request)
     {
 
-       
+
         // // Validate phone number
         // $request->validate([
         //     'phone_number' => 'required|regex:/^(\+)[0-9]{10,15}$/',

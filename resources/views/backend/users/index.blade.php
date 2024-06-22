@@ -32,7 +32,7 @@
 					@foreach ($users as $key => $user)
 						<tr class="">
 							<td>{{$loop->index + 1 }}</td>
-							
+
 							<td>{{ $user->driver_id }}</td>
 							<td>
 								<a class="text-dark text-decoration-none" href="{{ route('users.show', $user->id) }}">{{ $user->name }}</a>
@@ -110,7 +110,37 @@
 		</div>
 
 	</div>
+
+
+
+
 @endsection
 @push('script')
-	<script></script>
+	<script>
+
+
+
+        $(document).ready(function (){
+
+
+        $.ajax({
+            url: '/api/all-driver-lists',
+            type: "GET",
+            success: function (response) {
+                console.log(response);
+
+            },
+            error: function (response) {
+                console.log("Error : ", response);
+            }
+        });
+
+
+
+
+
+
+        })
+
+    </script>
 @endpush
