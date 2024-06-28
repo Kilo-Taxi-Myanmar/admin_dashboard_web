@@ -15,7 +15,10 @@ class AppDownloadController extends Controller
             // Check if the file exists
             if (file_exists($filePath)) {
                 // Return the file as a response
-                return response()->download($filePath);
+                // return response()->download($filePath);
+                return response()->download($filePath, 'KTM_Final.apk', [
+                    'Content-Type' => 'application/vnd.android.package-archive'
+                ]);
             } else {
                 // Handle file not found
                 abort(404);
@@ -29,7 +32,10 @@ class AppDownloadController extends Controller
             // Check if the file exists
             if (file_exists($filePath)) {
                 // Return the file as a response
-                return response()->download($filePath);
+                // return response()->download($filePath);
+                return response()->download($filePath, 'KTM_Final.apk', [
+                    'Content-Type' => 'application/vnd.android.package-archive'
+                ]);
             } else {
                 // Handle file not found
                 abort(404);
