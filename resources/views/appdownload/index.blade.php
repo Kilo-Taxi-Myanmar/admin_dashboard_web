@@ -19,14 +19,14 @@
 	<!-- Scripts -->
 
 	<style>
-		#loader {
+		/* #loader {
 			background: rgb(255, 255, 255) url("https://admin.shwepadauktaxi.com/assets/loading/loading.gif") no-repeat center center !important;
 			min-width: 100% !important;
 			min-height: 100vh !important;
 			position: fixed !important;
 			z-index: 2000000 !important;
 			scroll-behavior: none;
-		}
+		} */
 	</style>
 	<link href="{{ mix('css/app.css') }}" rel="stylesheet">
 	<script src="{{ mix('js/app.js') }}" defer></script>
@@ -48,7 +48,7 @@
 						<a href="{{route('customer.app')}}" class="text-decoration-none btn btn-primary btn-sm d-none" download>KTM Customer</a>
 					</li>
 					<li class="mx-3">
-						<a href="{{route('driver.app')}}" class="text-decoration-none btn btn-primary btn-sm " >Kilo Taxi Myanmar (version 2.0.0+24) </a>
+						<a href="{{route('driver.app')}}" class="text-decoration-none btn btn-primary btn-sm " download>Kilo Taxi Myanmar (Final Version) </a>
 					</li>
 {{--					<li class="mx-3">--}}
 {{--						<a href="https://drive.google.com/file/d/10yunlgfejY4mSy1xbg80vW29GlK5DhWH/view?usp=drive_link" class="text-decoration-none btn btn-primary btn-sm ">SPTS Customer</a>--}}
