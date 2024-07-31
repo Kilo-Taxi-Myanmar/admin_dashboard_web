@@ -205,7 +205,7 @@ class DriverSearchController extends Controller
             ->first();
 
         // dd($trip);
-                    $tripData ;
+                    $tripData ='';
                     if($trip !== null){
                         $user = User::findOrFail($trip->user_id);
         
@@ -254,7 +254,7 @@ class DriverSearchController extends Controller
         $trip = Trip::findOrFail($id);
 
 
-        $tripData ;
+        $tripData ='';
         if($trip !== null){
             $user = User::findOrFail($trip->user_id);
 

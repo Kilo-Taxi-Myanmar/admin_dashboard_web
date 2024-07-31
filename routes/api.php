@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\Api\AdminDashboardController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\configController;
@@ -117,14 +117,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
 
+//   admin dashboard 
 
-
-
-
-
-
-
-
+     
+Route::get('/wallet/driverlist',[AdminDashboardController::class,'showDriver']);
+Route::post('/wallet/topup',[AdminDashboardController::class,'topUp']);
+Route::get('/pending/list',[AdminDashboardController::class,'pendingList']);
+Route::post('/status/change',[AdminDashboardController::class,'changeActiveStatus']);
+Route::get('/trips/all/history',[AdminDashboardController::class,'tripsAllHistory']);
 
 
 

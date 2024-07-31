@@ -318,7 +318,7 @@ class CustromerTripController extends Controller
              
         ];
 
-        broadcast(new TripEvent($trip));
+   
 
         return response()->json(['trip'=>$trip,'message' => 'Trip updated successfully'], 200);
     }
