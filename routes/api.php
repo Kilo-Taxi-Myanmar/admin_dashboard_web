@@ -120,7 +120,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 //   admin dashboard 
 
      
-Route::get('/wallet/driverlist',[AdminDashboardController::class,'showDriver']);
+Route::post('/wallet/driverlist',[AdminDashboardController::class,'showDriver']);
 Route::post('/wallet/topup',[AdminDashboardController::class,'topUp']);
 Route::get('/pending/list',[AdminDashboardController::class,'pendingList']);
 Route::post('/status/change',[AdminDashboardController::class,'changeActiveStatus']);

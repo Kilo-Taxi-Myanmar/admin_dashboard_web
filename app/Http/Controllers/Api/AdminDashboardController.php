@@ -12,21 +12,39 @@ class AdminDashboardController extends Controller
 {
 
     // wallet 
-    public function showDriver() {
-      
-        $drivers = User::role('user')->where('status', 'active')
-                    ->select('name', 'phone', 'balance')
-                    ->paginate(25);
+    public function showDriver(Request $request) {
+        // Query ကိုစတင်တည်ဆောက်သည်
+        $query = User::role('user')->where('status', 'active');
     
-        
+        // Name filter ထည့်မည်
+        if ($request->has('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+    
+        // Phone filter ထည့်မည်
+        if ($request->has('phone')) {
+            $query->where('phone', 'like', '%' . $request->phone . '%');
+        }
+    
+        // Paginate နဲ့ရှာဖွေမှုလုပ်ပြီး select လုပ်မည်
+        $drivers = $query->select('name', 'phone', 'balance')->paginate(25);
+    
+        // Response ပြန်ပေးမည်
         return response()->json($drivers);
     }
-
+    
 
     public function topUp(Request $request) {
             $driver = User::where('phone', $request->phone)->first();
     
+            $validator = Validator::make($request->all(),[
+                'phone' => 'required'
+            ]);
 
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()], 400);
+            }
+    
         if ($driver) {
 
             $driver->balance = $driver->balance + $request->balance;
