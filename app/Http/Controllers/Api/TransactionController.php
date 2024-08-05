@@ -14,7 +14,12 @@ class TransactionController extends Controller
     public function index()
     {
         $user = Auth::user(); // get the authenticated user
-        $transactions = Transaction::where('user_id', $user->id)->where('income_outcome', 'income')->get(); // fetch transactions for that user
+        $transactions = Transaction::where('user_id', $user->id)->where('income_outcome', 'income')->get(); 
+        
+        $transactions = $transactions->transform(function ($transaction) {
+            $transaction->staff_name = User::where('id', $transaction->staff_id)->value('name');
+            return $transaction;
+        });
         return response()->json($transactions);
     }
 

@@ -87,6 +87,13 @@ class TripController extends Controller
                 $fees =  json_encode($arr);
             }
 
+            if($request->extra_fee_remove_list !== null && $request->extra_fee_remove_list !== "null"){
+                $array = explode(',', $request->extra_fee_remove_list);
+                $extra_fee_remove_list=  json_encode($array);
+            }else{
+                $arr = [];
+                $extra_fee_remove_list =  json_encode($arr);
+            }
 
             
         if($request->trip_id == null || $request->trip_id == 'null'){
@@ -117,6 +124,7 @@ class TripController extends Controller
             $trip->end_time = $request->end_time;
             $trip->cartype = $request->cartype;
             $trip->extra_fee_list = $fees;
+            $trip->extra_fee_remove_list = $extra_fee_remove_list;
             $trip->polyline = json_encode($request->polyline);
             
     
@@ -167,8 +175,18 @@ class TripController extends Controller
             }else{
                 $datafee = $fees;
             }
+            $extra_remove_ids = json_decode($trip->extra_fee_remove_list);
+
+            if($extra_fee_remove_list !== null && $extra_fee_remove_list !== 'null'){
+                $feeremove = collect($extra_remove_ids)->map(function ($id) {
+                    return DB::table('fees')->where('id', $id)->first();
+                });
+            }else{
+                $feeremove = $extra_fee_remove_list;
+            }
            
             $trip->extra_fee_list = $datafee;
+            $trip->extra_fee_remove_list = $feeremove;
 
             // $drivers = User::role('user')->with(['trips' => function ($query) {
             //     $query->whereBetween('created_at', [Carbon::now()->startOfWeek(),Carbon::now()->endOfWeek()]);
@@ -398,3 +416,8 @@ class TripController extends Controller
 
    
 }
+
+
+
+
+

@@ -65,12 +65,12 @@
 							</a></td>
 							
 
-							<td>
+							{{-- <td>
 								<a class="text-dark text-decoration-none"
 									href="{{ route('trip.show', $trip->id) }}">
 									{{$trip->user->name}}
 								</a>
-							</td>
+							</td> --}}
 							<td>
 								@if($trip->user_id === null)
 								-
