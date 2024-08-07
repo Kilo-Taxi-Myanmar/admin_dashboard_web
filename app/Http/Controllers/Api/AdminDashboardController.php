@@ -124,71 +124,6 @@ class AdminDashboardController extends Controller
     }
 
 
-    public function tripsAllHistory(){
-        // $trips = Trip::where('status','completed')->latest()->paginate(25);
-
-        // return response()->json($trips);
-
-
-            $trips = Trip::whereNotIn('status', ['pending', 'accepted', 'canceled'])
-            ->latest()
-            ->paginate(25);
-
-        $trips->getCollection()->transform(function ($trip) {
-            $extra_fee_ids = json_decode($trip->extra_fee_list);
-            if (is_array($extra_fee_ids) && count($extra_fee_ids) > 0) {
-                $fees = DB::table('fees')->whereIn('id', $extra_fee_ids)->get();
-              
-            } else {
-                $fees = collect([]);
-            }
-
-            $extra_remove_ids = json_decode($trip->extra_fee_remove_list);
-
-            // If there are no extra fee ids, return an empty array
-            if (is_array($extra_remove_ids) && count($extra_remove_ids) > 0) {
-                $feesremove = DB::table('fees')->whereIn('id', $extra_remove_ids)->get();
-              
-            } else {
-                $feesremove = collect([]);
-            }
-
-            return [
-                'id' => $trip->id,
-                'user_id' => $trip->user_id,
-                'distance' => $trip->distance,
-                'duration' => $trip->duration,
-                'waiting_time' => $trip->waiting_time,
-                'normal_fee' => $trip->normal_fee,
-                'waiting_fee' => $trip->waiting_fee,
-                'extra_fee' => $trip->extra_fee,
-                'initial_fee' => $trip->initial_fee,
-                'total_cost' => $trip->total_cost,
-                'start_lat' => $trip->start_lat,
-                'start_lng' => $trip->start_lng,
-                'end_lat' => $trip->end_lat,
-                'end_lng' => $trip->end_lng,
-                'status' => $trip->status,
-                'start_address' => $trip->start_address,
-                'end_address' => $trip->end_address,
-                'driver_id' => $trip->driver_id,
-                'cartype' => $trip->cartype,
-                'start_time' => $trip->start_time,
-                'end_time' => $trip->end_time,
-                'extra_fee_list' => $fees,
-                'extra_fee_remove_list'=>$feesremove,
-                'polyline' => json_decode($trip->polyline),
-                'commission_fee' => $trip->commission_fee,
-                'created_at' => Carbon::parse($trip->created_at)->format('Y-m-d h:i A'),
-                'updated_at' => Carbon::parse($trip->updated_at)->format('Y-m-d h:i A'),
-            ];
-        });
-
-        return response()->json($trips, 200);
-
-    }
-
-
     public function driverIdAllTrip(Request $request){
        
         $validator = Validator::make($request->all(),[
@@ -198,11 +133,20 @@ class AdminDashboardController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
         
-        $trips = Trip::where('driver_id',$request->id)
-        ->latest()
-        ->paginate(25);
+        if($request->id <= 0){
 
-    $trips->getCollection()->transform(function ($trip) {
+            $trips = Trip::whereNotIn('status', ['pending', 'accepted', 'canceled'])
+            ->latest()
+            ->paginate(25);
+
+        }else{
+            $trips = Trip::where('driver_id',$request->id)
+            ->latest()
+            ->paginate(25);
+        }
+    
+
+        $trips->getCollection()->transform(function ($trip) {
         $extra_fee_ids = json_decode($trip->extra_fee_list);
 
         // If there are no extra fee ids, return an empty array
@@ -265,15 +209,26 @@ class AdminDashboardController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-        $transactions = Transaction::where('user_id',$request->id)
+
+        if($request->id <= 0){
+            $transactions = Transaction::
+            where('income_outcome','income')
+            ->latest()
+            ->paginate(25);
+        }else{
+            $transactions = Transaction::where('user_id',$request->id)
                         ->where('income_outcome','income')
                         ->latest()
                         ->paginate(25);
+        }
+        
 
 
                         $transactions->getCollection()->transform(function ($transaction) {
                           
                             $transaction->staff_name = User::where('id', $transaction->staff_id)->value('name');
+                            $transaction->user_name = User::where('id', $transaction->user_id)->value('name');
+
                             return $transaction;
                         });
         return response()->json($transactions);

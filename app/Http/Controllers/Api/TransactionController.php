@@ -18,6 +18,8 @@ class TransactionController extends Controller
         
         $transactions = $transactions->transform(function ($transaction) {
             $transaction->staff_name = User::where('id', $transaction->staff_id)->value('name');
+            $transaction->user_name = User::where('id', $transaction->user_id)->value('name');
+
             return $transaction;
         });
         return response()->json($transactions);

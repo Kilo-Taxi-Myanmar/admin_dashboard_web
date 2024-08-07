@@ -124,7 +124,6 @@ Route::post('/wallet/driverlist',[AdminDashboardController::class,'showDriver'])
 Route::post('/wallet/topup',[AdminDashboardController::class,'topUp']);
 Route::get('/pending/list',[AdminDashboardController::class,'pendingList']);
 Route::post('/status/change',[AdminDashboardController::class,'changeActiveStatus']);
-Route::get('/trips/all/history',[AdminDashboardController::class,'tripsAllHistory']);
 Route::post('/admin/show/driver/trips',[AdminDashboardController::class,'driverIdAllTrip']);
 Route::post('/admin/show/driver/transaction',[AdminDashboardController::class,'transactionsList']);
 
