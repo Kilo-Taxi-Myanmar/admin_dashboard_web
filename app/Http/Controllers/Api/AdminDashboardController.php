@@ -30,7 +30,7 @@ class AdminDashboardController extends Controller
             });
         }
     
-        $drivers = $query->select('name', 'phone', 'balance')
+        $drivers = $query->select('id','name', 'phone', 'balance')
                      ->withCount('trips')
                     ->paginate(25);
    
