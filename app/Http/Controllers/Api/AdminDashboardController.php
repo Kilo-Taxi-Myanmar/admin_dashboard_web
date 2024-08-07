@@ -8,6 +8,7 @@ use App\Models\Trip;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -30,7 +31,7 @@ class AdminDashboardController extends Controller
             });
         }
     
-        $drivers = $query->select('id','name', 'phone', 'balance')
+        $drivers = $query->select('id','driver_id','name', 'phone', 'balance')
                      ->withCount('trips')
                     ->paginate(25);
    
@@ -39,6 +40,8 @@ class AdminDashboardController extends Controller
     
 
     public function topUp(Request $request) {
+
+        $auth = Auth::id();
             $driver = User::where('phone', $request->phone)->first();
     
             $validator = Validator::make($request->all(),[
@@ -52,8 +55,16 @@ class AdminDashboardController extends Controller
         if ($driver) {
 
             $driver->balance = $driver->balance + $request->balance;
+            
             $driver->save();
-    
+
+            $transaction = new Transaction();
+
+            $transaction->user_id = $driver->id;
+            $transaction->staff_id = $auth;
+            $transaction->amount = $request->balance;
+            $transaction->income_outcome = 'income';
+            $transaction->save();
   
             $driver = $driver->only(['name', 'phone', 'balance']);
     
