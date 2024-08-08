@@ -153,9 +153,33 @@ class AdminDashboardController extends Controller
                 $feesremove = collect([]);
             }
 
+            $driver = User::where('id', $trip->driver_id)
+            ->select('id','driver_id','name')
+            ->with(['vehicle' => function ($query) {
+                $query->select('user_id', 'vehicle_plate_no');
+            }])
+            ->first();
+        
+        // vehicle_plate_no ကို driver object ထဲထည့်ပေးမည်
+        if ($driver && $driver->vehicle) {
+            $driver->vehicle_plate_no = $driver->vehicle->vehicle_plate_no;
+            unset($driver->vehicle); // vehicle ကိုဖျက်ပစ်မည်
+        }
+        
+      
+      
+    if($trip->user_id !== null){
+        $user = User::where('id', $trip->user_id)
+        ->select('id', 'driver_id as user_id', 'name', 'phone')
+        ->first();
+    }else{
+        $user = $trip->user_id;
+    }
+
+
             return [
                 'id' => $trip->id,
-                'user_id' => $trip->user_id,
+                'user' => $user,
                 'distance' => $trip->distance,
                 'duration' => $trip->duration,
                 'waiting_time' => $trip->waiting_time,
@@ -171,7 +195,7 @@ class AdminDashboardController extends Controller
                 'status' => $trip->status,
                 'start_address' => $trip->start_address,
                 'end_address' => $trip->end_address,
-                'driver_id' => $trip->driver_id,
+                'driver' => $driver,
                 'cartype' => $trip->cartype,
                 'start_time' => $trip->start_time,
                 'end_time' => $trip->end_time,
@@ -204,6 +228,7 @@ class AdminDashboardController extends Controller
             ->latest()
             ->paginate(25);
             
+            
         }else{
             $trips = Trip::where('driver_id',$request->id)
             ->latest()
@@ -212,8 +237,9 @@ class AdminDashboardController extends Controller
     
 
         $trips->getCollection()->transform(function ($trip) {
-        $extra_fee_ids = json_decode($trip->extra_fee_list);
 
+        $extra_fee_ids = json_decode($trip->extra_fee_list);
+          
         // If there are no extra fee ids, return an empty array
         if (is_array($extra_fee_ids) && count($extra_fee_ids) > 0) {
             $fees = DB::table('fees')->whereIn('id', $extra_fee_ids)->get();
@@ -232,9 +258,33 @@ class AdminDashboardController extends Controller
             $feesremove = collect([]);
         }
 
+
+     
+        $driver = User::where('id', $trip->driver_id)
+        ->select('id','driver_id','name','phone')
+        ->with(['vehicle' => function ($query) {
+            $query->select('id','user_id', 'vehicle_plate_no','vehicle_model');
+        }])
+        ->first();
+    
+
+    if ($driver && $driver->vehicle) {
+        $driver->vehicle_plate_no = $driver->vehicle->vehicle_plate_no;
+        unset($driver->vehicle); // vehicle ကိုဖျက်ပစ်မည်
+    }
+
+    if($trip->user_id !== null){
+        $user = User::where('id', $trip->user_id)
+        ->select('id', 'driver_id as user_id', 'name', 'phone')
+        ->first();
+    }else{
+        $user = $trip->user_id;
+    }
+
+
         return [
             'id' => $trip->id,
-            'user_id' => $trip->user_id,
+            'user' => $user,
             'distance' => $trip->distance,
             'duration' => $trip->duration,
             'waiting_time' => $trip->waiting_time,
@@ -250,7 +300,7 @@ class AdminDashboardController extends Controller
             'status' => $trip->status,
             'start_address' => $trip->start_address,
             'end_address' => $trip->end_address,
-            'driver_id' => $trip->driver_id,
+            'driver' => $driver,
             'cartype' => $trip->cartype,
             'start_time' => $trip->start_time,
             'end_time' => $trip->end_time,

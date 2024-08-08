@@ -263,13 +263,7 @@ class UserController extends Controller
     public function userTrip()
     {
         $user = Auth::user();
-       
-        // $trips = Trip::where('driver_id',$user->id)
-        //                 ->whereNot('status','pending')
-        //                 ->whereNot('status','accepted')
-        //                 ->whereNot('status','canceled')
-        //                 ->latest()
-        //                 ->get();
+
         
         $trips = Trip::where('driver_id', $user->id)
             ->whereNotIn('status', ['pending', 'accepted', 'canceled'])
@@ -292,9 +286,32 @@ class UserController extends Controller
 
                 // $extraFeeList = json_decode($trip->extra_fee_list, true);
                 // $extraFees = Fee::whereIn('id', $extraFeeList)->get();
+                $driver = User::where('id', $trip->driver_id)
+                ->select('id','driver_id','name')
+                ->with(['vehicle' => function ($query) {
+                    $query->select('user_id', 'vehicle_plate_no');
+                }])
+                ->first();
+            
+            // vehicle_plate_no ကို driver object ထဲထည့်ပေးမည်
+            if ($driver && $driver->vehicle) {
+                $driver->vehicle_plate_no = $driver->vehicle->vehicle_plate_no;
+                unset($driver->vehicle); // vehicle ကိုဖျက်ပစ်မည်
+            }
+            
+            if($trip->user_id !== null){
+                $user = User::where('id', $trip->user_id)
+                ->select('id', 'driver_id as user_id', 'name', 'phone')
+                ->first();
+            }else{
+                $user = $trip->user_id;
+            }
+        
+            
+              
                 return [
                     'id' => $trip->id,
-                    'user_id'=>$trip->user_id,
+                    'user'=>$user,
                     'distance'=> $trip->distance,
                     'duration'=> $trip->duration,
                     'waiting_time'=> $trip->waiting_time,
@@ -310,7 +327,7 @@ class UserController extends Controller
                     'status' => $trip->status,
                     'start_address'=>$trip->start_address,
                     'end_address'=>$trip->end_address,
-                    'driver_id' => $trip->driver_id,
+                    'driver' =>$driver,
                     'cartype'=>$trip->cartype,
                     'start_time'=>$trip->start_time,
                     'end_time' => $trip->end_time,
