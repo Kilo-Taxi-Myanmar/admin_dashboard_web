@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class AdminDashboardController extends Controller
 {
@@ -348,4 +349,65 @@ class AdminDashboardController extends Controller
                         });
         return response()->json($transactions);
     }
+
+
+    // public function updateDriverid(Request $request){
+    //     $validator = Validator::make($request->all(), [
+    //         'id' => 'required|exists:users,id', // Check if the user ID exists
+    //         'driver_id' => [
+    //             'required',
+    //             Rule::unique('users')->ignore($request->id) // Check if driver_id is unique, excluding current user
+    //         ]
+    //     ]);
+
+    //     if($validator->failed()){
+    //         return response()->json(['error' => $validator->errors()], 400);
+    //     }
+
+    //     $driver = User::find($request->id);
+
+    //     if($driver){
+    //         $driver->driver_id = $request->driver_id;
+    //         $driver->save();
+    
+    //         return response()->json('success',200);
+    //     }else{
+           
+    //         return response()->json('Driver Not Found'); 
+    //     }
+    
+    // }
+
+public function updateDriverId(Request $request){
+    // Validate the incoming request
+    $validator = Validator::make($request->all(),[
+        'id' => 'required|exists:users,id',
+        'driver_id' => [
+            'required',
+            Rule::unique('users')->ignore($request->id)
+        ]
+    ]);
+
+    // Check if validation fails
+    if ($validator->fails()) {
+          // Get the first validation error message
+        //   $errorMessage = $validator->errors()->first();
+        //   return response()->json(['message'=>$errorMessage], 400);
+        // return response()->json(['error' => $validator->errors()], 400);
+        $errorMessages = $validator->errors()->all();
+        return response()->json(['message' => $errorMessages], 400);
+     
+
+    }
+
+    // Find the user by ID
+    $driver = User::findOrFail($request->id);
+
+    // Update the driver_id
+    $driver->driver_id = $request->driver_id;
+    $driver->save();
+
+    return response()->json('success', 200);
+}
+
 }

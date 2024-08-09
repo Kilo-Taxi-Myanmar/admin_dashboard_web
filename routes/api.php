@@ -127,6 +127,8 @@ Route::post('/status/change',[AdminDashboardController::class,'changeActiveStatu
 Route::get('/trips/all/history',[AdminDashboardController::class,'tripsAllHistory']);
 Route::post('/admin/show/driver/trips',[AdminDashboardController::class,'driverIdAllTrip']);
 Route::post('/admin/show/driver/transaction',[AdminDashboardController::class,'transactionsList']);
+Route::post('/admin/update/driverid',[AdminDashboardController::class,'updateDriverid']);
+
 
 
 
